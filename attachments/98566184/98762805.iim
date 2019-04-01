@@ -1,0 +1,19 @@
+VERSION BUILD=8810214 RECORDER=FX
+TAB T=1
+URL GOTO={{site}}/node/add/news
+TAG POS=1 TYPE=INPUT:FILE FORM=ID:node-form ATTR=ID:edit-field-thumbnail-0-upload CONTENT={{file_thumbnail}}
+TAG POS=1 TYPE=INPUT:SUBMIT FORM=ID:node-form ATTR=ID:edit-field-thumbnail-0-filefield-upload
+TAG POS=1 TYPE=INPUT:TEXT FORM=ID:node-form ATTR=ID:edit-title CONTENT={{title}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ID:node-form ATTR=ID:edit-field-post-date-0-value-datepicker-popup-0 CONTENT={{post_date}}
+TAG POS=1 TYPE=SELECT FORM=ID:node-form ATTR=ID:edit-taxonomy-7-hierarchical-select-selects-0 CONTENT=%37
+TAG POS=1 TYPE=INPUT:RADIO FORM=ID:node-form ATTR=ID:edit-format-6-1
+TAG POS=1 TYPE=TEXTAREA FORM=ID:node-form ATTR=ID:edit-body CONTENT={{body}}
+SET !ERRORIGNORE YES
+TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:node-form ATTR=ID:edit-sn-status-facebook-page-post CONTENT=NO
+TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:node-form ATTR=ID:edit-sn-status-facebook-profile-post CONTENT=NO
+TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:node-form ATTR=ID:edit-sn-status-facebook-event-post CONTENT=NO
+TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:node-form ATTR=ID:edit-sn-status-twitter-post CONTENT=NO
+SET !ERRORIGNORE NO
+TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:node-form ATTR=ID:edit-field-fan-club-only-value CONTENT={{fan_club_only}}
+WAIT SECONDS=2
+TAG POS=1 TYPE=INPUT:SUBMIT FORM=ID:node-form ATTR=ID:edit-submit

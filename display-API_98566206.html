@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : display API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : display API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>display module hooks - Hooks created by the display module<br/> - These are used to populate the default management tables.</p><p>hook_display_type<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    array('Content_Type'...)<br/>  Description:<br/>    Return an array of content types controlled by this module. Names should<br/>      be machine readable but can be case-insensitive<br/><br/>hook_display_type_human_readable<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    array(<br/>      'content_type' =&gt; 'Content Type',<br/>    )<br/>  Description:<br/>    Return an array of content types controled by this module. Keys must be<br/>      machine-readable. Values must be human-readable.<br/><br/>hook_display_teaser<br/>  Parameters:<br/>    &amp;$node =&gt; fully-loaded node<br/>  Returns:<br/>    NULL =&gt; Default and most-common case<br/>    string =&gt; &quot;Shortened preview of $node&quot;<br/>  Description:<br/>    Generate a brief preview of a node for display on management tables.<br/>      Unless, $node-&gt;type is included in hook_display_type, this will usually return NULL.</p><p>hook_display_manage_table_row_alter<br/>  Parameters:<br/>    $row =&gt; array for inclusion in a table<br/>  Returns:<br/>    array =&gt; Usually a modified version of row<br/>  Description:<br/>    If a row with a key matching this module's name is added to a management form, this module may implement this hook to directly alter it immediately before display.</p><p>display module functions - Functions implemented by the display module called elsewhere<br/> - these are mostly used for generating content management tables and content previews.</p><p>display_get_filter_form<br/>  Parameters:<br/>    $filter_type =&gt; NULL|string|array - Set default_value for Type field<br/>      Create &quot;Add X&quot; button[s] before form<br/>    $filter_author =&gt; bool - Add filter by author field<br/>    $filter_artist =&gt; bool - Add filter by artist field<br/>    $filter_tags =&gt; bool - Add filter by tags field<br/>    $filter_search =&gt; string - default value for search field<br/>    $show_type =&gt; bool - display filter by type field<br/>    $filter_other_terms =&gt; NULL - no extra terms field<br/>      OR array(<br/>        'name' =&gt; string - display name of field<br/>        'type' =&gt; string - taxonomy type - mutually exclusive with options<br/>        'options' =&gt; array - select field optons - mutually exclusive with type<br/>        'value' =&gt; int - default_value<br/>      ) - create an extra taxonomy terms filter field<br/>  Returns:<br/>    array() - per forms API<br/>  Description:<br/>    Create a form array to generate filter form on manage pages.<br/><br/>display_get_content_form<br/>  Parameters:<br/>    $filter_type =&gt; NULL - don't filter on type<br/>      OR array('type1','type2') - Display only 'type1' and 'type2' content<br/>      OR string='type' - display only 'type' content<br/>    $filter_author =&gt; NULL - don't filter on author<br/>      OR int - only display content authored by matching Author taxonomy<br/>    $filter_artist =&gt; NULL - don't filter on artist<br/>      OR int - only display content with matching Additional Artist taxonomy<br/>    $filter_tags =&gt; NULL - don't filter on tags<br/>      OR int - only display content with matching Tag taxonomy<br/>    $filter_search =&gt; NULL - don't filter on search<br/>      OR string - only display content with string in body or title<br/>    $filter_other_terms - NULL - don't filter by other terms<br/>      OR array(array('name'=&gt;string,'value'=&gt;int)...)<br/>        - only display content with matching taxonomies<br/>    $sort_by =&gt; int - sort results by column<br/>      - mutually exclusive with sortable<br/>    $sortable =&gt; int - make table sortable by column<br/>      - mutually exclusive with sort_by<br/>  Return:<br/>    array() - per forms API<br/>  Description:<br/>    Create a form array to display and manage content on management pages.<br/><br/>theme_display_all_table<br/>  Parameters:<br/>    $form =&gt; array() per forms API with the following exceptions<br/>      #add_theme_fields =&gt; string - this function will be called on the table<br/>        to add columns to the table.<br/>      #sort_by =&gt; int - the table will be sorted by this field<br/>      #sortable =&gt; int - the table will be draggable and sortable by this field<br/>      #disable_tags =&gt; bool - remove tags column<br/>      #disable_preview =&gt; bool - remove preview column<br/>      #disable_title =&gt; bool - remove title column<br/>      #disable_type =&gt; bool - remove type column<br/>      #disable_author =&gt; bool - remove author column<br/>      #disable_artists =&gt; bool - remove artists column<br/>      #disable_order =&gt; bool - remove order column<br/>      #disable_actions =&gt; bool - remove actions column<br/>      #other_terms =&gt; string - add extra column with that string as header<br/>  Return:<br/>    string - HTML for display.<br/>  Description:<br/>    Default themeing function for forms created by display_get_content_form.<br/>    The form will be rendered as a sortable or paginated table.<br/><br/>_display_get_title<br/>  Parameters:<br/>    $page =&gt; string - page name per navigation_bar<br/>    $prefix =&gt; string - affixed to front of result<br/>    $suffix =&gt; string - affixed to end of result<br/>  Returns:<br/>    string - HTML title of the page.<br/>  Description:<br/>    Generate an HTML title based on user's name for this page per navigation_bar<br/><br/>_display_filter_html<br/>  Parameters:<br/>    $string =&gt; string - HTML string<br/>    $max_length =&gt; int - maximum length of result<br/>  Return:<br/>    string - filtered HTML<br/>  Description:<br/>    Shorten and filter HTML very permissively.<br/>    If max_length is set; delete img, object, and param tags; then trim the result down to max_length characters long; then remove characters one at a time until tags appear balanced.<br/>    Then call _display_balance_tags and filter_xss_bp<br/><br/>_display_balance_tags<br/>  Parameters<br/>    $text =&gt; string - HTML<br/>    $ok_open =&gt; array('br','img'...) - tags that don't need to be closed<br/>  Return:<br/>    string - HTML with tags balanced.<br/>  Description:<br/>    Balance HTML code so no tags are left open.</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

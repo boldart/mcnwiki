@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : manage API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : manage API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>manage module - Hooks created by the manage module<br/> - These hooks populate the navigation bars in the admin theme and modify the user dashboard</p><p>hook_manage_whereami<br/>  Parameters:<br/>    $page =&gt; string - current path (e.g. manage/content)<br/>    $type =&gt; optional string - current content type (e.g. blog)<br/>  Returns:<br/>    NULL (default and most common case)<br/>    array(<br/>      'section' =&gt; content|media|tools|settings<br/>      'subsection' =&gt; string (usually module name)<br/>      )<br/>    )<br/>  Description:<br/>    Return an array designating where in the manage interface we are.<br/>    For purposes of building and highlighting nav bars.<br/><br/>hook_manage_admin<br/>  Parameters:<br/>    $page =&gt; string - current path if available (e.g. manage/content)<br/>  Returns:<br/>    array(<br/>      [SECTION][SUBSECTION]['top|view|left'][KEY]  =&gt; array(<br/>        '#name' =&gt; string - display name<br/>        '#link' =&gt; string - link for l() calls<br/>        '#weight' =&gt; int - for sorting<br/>        '#activation' =&gt; array(<br/>          'page|pagestart|section' =&gt; array(strings - paths or subsections), - If the current page, first n characters of page, or subsection match something in the array, this link will have the class &quot;active&quot; appended.<br/>        ),<br/>        '#options' =&gt; array() - to be passed to l()<br/>        '#mobile_priority' =&gt; int - How important is it to display this on mobile sites? Starting defaults are 0 for not displayed. 1+ for displayed.<br/>      )<br/>    )<br/>  Description:<br/>    Return an array describing links to be placed in the admin page navigation bars. This will be invoked up to two times per page load. The first invocation will pass in a blank value for $page. Whatever results are returned will be cached in the cache_menu table. The second invocation will pass the current path as $page. This result will not be cached. The SECTION and SUBSECTION keys should match the results of some module's results for hook_manage_whereami<br/><br/>hook_manage_cancel_recent_change_entry<br/>  Parameters:<br/>    $node =&gt; a fully-loaded node (usually one that is being modified currently)<br/>    $op =&gt; string - the operation being performed on the node.<br/>  Returns:<br/>    NULL/false (default and most common case)<br/>    TRUE - if this $op on this $node doesn't merit an entry</p><p>hook_manage_settings_url<br/>  Parameters:<br/>    none<br/>  Returns<br/>    string - path/to/a/settings/page<br/>  Description<br/>    If this module has a default settings page, this hook returns the path for easy access throughout the admin UI</p><p>hook_manage_node_redirect<br/>  Parameters:<br/>    $type =&gt; string - a node type<br/>  Returns:<br/>    NULL|string -  an internal path<br/>  Description:<br/>    If this module provides the management interface for a content type, it should return the path to the main management page. This allows the node form to redirect to a more useful default location.</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

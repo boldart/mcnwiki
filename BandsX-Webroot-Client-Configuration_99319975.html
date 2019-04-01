@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : BandsX Webroot Client Configuration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Creating-a-Band-Site-Hosting-Server_99287098.html">Creating a Band Site Hosting Server</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : BandsX Webroot Client Configuration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This is instructions for populating the webroot of a new Bombplates site hosting server</p><p>See also: <a href="https://intranet.devmcn.com/documentation/creating-band-site-hosting-server" class="external-link" rel="nofollow">Creating a Band Site Hosting Server</a></p><p>Webroot: </p><p>$ cd /var/www/html<br/>$ git clone <a href="mailto:git@devmcn.com" class="external-link" rel="nofollow">git@devmcn.com</a>:platforms/bombplates/webroot .<br/>$ mkdir sites<br/>$ cd sites<br/>$ mkdir all<br/>$ cd all<br/>$ git clone <a href="mailto:git@devmcn.com" class="external-link" rel="nofollow">git@devmcn.com</a>:platforms/bombplates/themes<br/>$ git clone <a href="mailto:git@devmcn.com" class="external-link" rel="nofollow">git@devmcn.com</a>:platforms/bombplates/modules<br/>$ git clone <a href="mailto:git@devmcn.com" class="external-link" rel="nofollow">git@devmcn.com</a>:platforms/bombplates/libraries</p><p>Includes directory:</p><p>$  mkdir /var/www/include<br/>$ cd /var/www/include<br/>$ git clone <a href="mailto:git@devmcn.com" class="external-link" rel="nofollow">git@devmcn.com</a>:platforms/bombplates/includes . </p><p>Check permissions</p><p style="margin-left: 40.0px;"># cd /var/www/html<br/># chown -R root:users ./*<br/># cd /var/www/include<br/># chown -R root:users ./*</p><p>Configure the sites/default folder (where bandsY is a previous bandsX server)</p><p style="margin-left: 40.0px;">$ cd /var/www/html/sites<br/>$ mkdir default<br/>$ cd default<br/>$ rsync -avz <a href="mailto:SOMEACCOUNT@bandsY.bombplates.com" class="external-link" rel="nofollow">SOMEACCOUNT@bandsY.bombplates.com</a>:/var/www/html/sites/default/* ./<br/>$ vi settings.php<br/>$ vi manual_db.php</p><p style="margin-left: 80.0px;">Update the mysql credentials in both of those files to match <a href="http://intranet.devmcn.com/documentation/bandsx-sqld-configuration" class="external-link" rel="nofollow">those you set as the default earlier</a>.</p><p style="margin-left: 40.0px;">$ mysql -u USER -pPASSWORD DB &lt; /user/bandsXtools/bombplates.sql</p><p>Enable the pre-build theme on the default site</p><ul><li>go to <a href="http://bandsX.bombplates.com/user" class="external-link" rel="nofollow">http://bandsX.bombplates.com/user</a></li><li>login as administrator</li><li><a href="http://bandsX.bombplates.com/admin/build/themes" class="external-link" rel="nofollow">http://bandsX.bombplates.com/admin/build/themes</a></li><li>Enable &quot;Site Not Found&quot; and set it as default</li></ul>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

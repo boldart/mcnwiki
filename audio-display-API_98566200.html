@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : audio display API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : audio display API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p><span style="color: rgb(0,0,0);">audio_display module hooks </span><br/><span style="color: rgb(0,0,0);"> - These hooks allow modules to override the default audio player.</span><br/><br/><span style="color: rgb(0,0,0);">hook_audio_display_list</span><br/><span style="color: rgb(0,0,0);">  Parameters:</span><br/><span style="color: rgb(0,0,0);">    none</span><br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    array(</span><br/><span style="color: rgb(0,0,0);">      'module_name' =&gt; array(</span><br/><span style="color: rgb(0,0,0);">        'name' =&gt; string - human-readable name</span><br/><span style="color: rgb(0,0,0);">      )</span><br/><span style="color: rgb(0,0,0);">    )</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Describe this module for audio_display parent module</span><br/><br/><span style="color: rgb(0,0,0);">hook_audio_display_admin</span><br/><span style="color: rgb(0,0,0);">  Parameters:</span><br/><span style="color: rgb(0,0,0);">    none</span><br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    array() - per forms API</span><br/><span style="color: rgb(0,0,0);">  Description</span><br/><span style="color: rgb(0,0,0);">    Return form elements for managing this module from manage/playlist/settings</span><br/><br/><span style="color: rgb(0,0,0);">hook_audio_display_admin_validate</span><br/><span style="color: rgb(0,0,0);">  Parameters:</span><br/><span style="color: rgb(0,0,0);">    $form =&gt; array() - per forms API</span><br/><span style="color: rgb(0,0,0);">    &amp;$form_state =&gt; array() - per forms API</span><br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    none</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Form validation for hook_audio_display_admin.</span><br/><br/><span style="color: rgb(0,0,0);">hook_audio_display_admin_submit</span><br/><span style="color: rgb(0,0,0);">  Parameters:</span><br/><span style="color: rgb(0,0,0);">    $form =&gt; array() - per forms API</span><br/><span style="color: rgb(0,0,0);">    &amp;$form_state =&gt; array() - per forms API</span><br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    none</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Form submission for hook_audio_display_admin.</span><br/><br/><span style="color: rgb(0,0,0);">hook_audio_display_launch_button</span><br/><span style="color: rgb(0,0,0);">  Parameters:</span><br/><span style="color: rgb(0,0,0);">    $url_only =&gt; bool - just return a url instead of a full link</span><br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    string of valid HTML</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Generates the HTML for the button to launch the audio player. Only needs to be implemented for modules that are different from the default.</span><br/><span style="color: rgb(0,0,0);">  Notes:</span><br/><span style="color: rgb(0,0,0);">    Called by audio_display_button()</span><br/><br/><span style="color: rgb(0,0,0);">hook_audio_display_player</span><br/>  Parameters:<br/>    $inc_headers =&gt; bool - include HTML headers and footers<br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    string of valid HTML</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Generates the HTML to display the audio player. Primarily referenced in audio_player</span></p><p><span style="color: rgb(0,0,0);">hook_audio_display_player</span>_embed<br/>  Parameters:<br/>    $inc_headers =&gt; bool - include HTML headers and footers<br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    string of valid HTML</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Generates an iFrameable version of the audio player (for embedding on other pages)</span></p><p><span style="color: rgb(0,0,0);">hook_audio_display_player_small</span><br/><span style="color: rgb(0,0,0);">  Parameters:</span><br/><span style="color: rgb(0,0,0);">    $node =&gt; a loaded node or a node id</span><br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    string of valid HTML</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Generates the HTML to display an icon-sized audio player. Do not implement this in modules that don't support an icon-sized player</span></p><p><span style="color: rgb(0,0,0);">hook_audio_display_player_single_seek<br/>  Parameters:<br/>    $node =</span><span style="color: rgb(0,0,0);">&gt; a loaded node or a node id</span><br/><span style="color: rgb(0,0,0);">  Returns:</span><br/><span style="color: rgb(0,0,0);">    string of valid HTML</span><br/><span style="color: rgb(0,0,0);">  Description:</span><br/><span style="color: rgb(0,0,0);">    Generates the HTML to display a small audio player with seek capabilities. Do not implement this in modules that don't support an icon-sized player</span></p></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

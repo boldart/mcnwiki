@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : Creating a Band Site Hosting Server</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : Creating a Band Site Hosting Server
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span>, last modified on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p><span style="color: rgb(0,0,0);">These are step-by-step instructions for creating a new band site hosting server (i.e. <a href="http://bandsX.bombplates.com" class="external-link" rel="nofollow">bandsX.bombplates.com</a>)</span></p><ol><li>Generate a server instance - e.g. A softlayer CentOS instance</li><li>Configure DNS (on <a href="http://dnsimple.com" class="external-link" rel="nofollow">dnsimple.com</a>)</li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99319912/BandsX+Firewall+Configuration" rel="nofollow">Configure firewall</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99385412/BandsX+add+and+configure+users" rel="nofollow">Create user(s)</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99156091/BandsX+sudo+Configuration" rel="nofollow">Configure sudo</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99319916/BandsX+ssh+Configuration" rel="nofollow">Configure ssh</a><a href="https://intranet.devmcn.com/documentation/bandsx-sudo-configuration" class="external-link" rel="nofollow"> </a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99450953/BandsX+YUM+Configuration" rel="nofollow">Configure YUM</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99254331/BandsX+git+configuration" rel="nofollow">Install git</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99319943/BandsX+sendmail+Configuration" rel="nofollow">Configure sendmail</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99221658/BandsX+php+Configuration" rel="nofollow">Configure php</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99450978/BandsX+httpd+Configuration" rel="nofollow">Configure Apache</a></li><li>Create /etc/httpd/conf.d/bombplates.conf</li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99188772/BandsX+ssl+Configuration" rel="nofollow">Configure SSL</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99188776/BandsX+perl+Configuration" rel="nofollow">Configure Perl</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99254363/BandsX+SQLd+Configuration" rel="nofollow">Configure MySQL</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99254367/BandsX+Munin+Configuration" rel="nofollow">Install and Configure Munin</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99319971/BandsX+Tools+Client+Configuration" rel="nofollow">Get Site Creation Scripts</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99451000/BandsX+GPG+Configuration" rel="nofollow">Configure GPG</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99319975/BandsX+Webroot+Client+Configuration" rel="nofollow">Populate Webroot</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99156114/BandsX+cron+Configuration" rel="nofollow">Configure Cron</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99451004/BandsX+Google+Configuration" rel="nofollow">Configure Google App</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99221683/BandsX+Facebook+App+Configuration" rel="nofollow">Configure Facebook App</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99254396/BandsX+Twitter+App+Configuration" rel="nofollow">Configure Twitter App</a></li><li><s>Configure MySpace App</s></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99451008/BandsX+this+node+Configuration" rel="nofollow">Configure Scripts in /var/www/include/this_node/X.php</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99287158/BandsX+backup+configuration" rel="nofollow">Configure backups</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99451014/BandsX+Configure+SELinux" rel="nofollow">Configure SELinux</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99385437/BandsX+Misc+Configuration" rel="nofollow">Other Miscellaneous Steps</a></li><li><a href="https://futureshirts.atlassian.net/wiki/spaces/MW/pages/99254409/BandsX+Functionality+Testing" rel="nofollow">Functionality testing</a></li></ol></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

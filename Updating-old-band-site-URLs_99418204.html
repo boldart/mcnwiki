@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : Updating old band site URLs</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : Updating old band site URLs
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>All new Bombplates sites have a canonical url along the lines of <a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a>. However, the earliest sites did not do this; we let the band pick their own canonical url (e.g. <a href="http://someband.com" class="external-link" rel="nofollow">someband.com</a>).</p><p>99% of functionality works like this. The one exception is that old sites can't change their theme. They will get an error saying &quot;There is a critical error in your site configuration! Please contact support.&quot; Should this happen, the user will have to contact us, wherein we will update their site.</p><p>For our instructions, we'll be moving a band called <a href="http://somebandmusic.com" class="external-link" rel="nofollow">somebandmusic.com</a> to <a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a> (for early sites, the subdomain is always the first 8 characters of their selected domain)</p><p style="margin-left: 40.0px;">Log into <a href="http://bands2.bombplates.com" class="external-link" rel="nofollow">bands2.bombplates.com</a><br/>$ cd /var/www/html/sites<br/>$ mv <a href="http://www.somebandmusic.com" class="external-link" rel="nofollow">www.somebandmusic.com</a> <a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a><br/>$ sudo vim /etc/httpd/conf.d/bombplates.conf</p><p>Remove the old entries for <a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a> and <a href="http://www.someband.com" class="external-link" rel="nofollow">www.someband.com</a></p><p>Add</p><p style="margin-left: 40.0px;">&lt;VirtualHost *:80&gt;<br/>  ServerAdmin <a href="mailto:info@somebandmusic.com" class="external-link" rel="nofollow">info@somebandmusic.com</a><br/>  DocumentRoot /var/www/html<br/>  ServerName <a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a><br/>&lt;/VirtualHost&gt;<br/>&lt;VirtualHost *:80&gt;<br/>  ServerName <a href="http://www.somebandmusic.com" class="external-link" rel="nofollow">www.somebandmusic.com</a><br/>  ServerAlias <a href="http://somebandmusic.com" class="external-link" rel="nofollow">somebandmusic.com</a><br/>  RewriteEngine On<br/>  RewriteOptions inherit<br/>  ProxyRequests Off<br/>  ProxyPreserveHost Off<br/>  ProxyPass / <a href="http://someband.bombplates.com/" class="external-link" rel="nofollow">http://someband.bombplates.com/</a><br/>  ProxyPassReverse / <a href="http://someband.bombplates.com/" class="external-link" rel="nofollow">http://someband.bombplates.com/</a><br/>  ProxyPassReverseCookieDomain .<a href="http://bombplates.com" class="external-link" rel="nofollow">bombplates.com</a> <a href="http://www.somebandmusic.com" class="external-link" rel="nofollow">www.somebandmusic.com</a><br/>&lt;/VirtualHost&gt;</p><p>Restart httpd</p><p style="margin-left: 40.0px;"># /etc/init.d/httpd restart</p><p>Update the HOSTS file</p><p style="margin-left: 40.0px;"># vim /etc/hosts<br/>127.0.0.1 <a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a></p><p>Log into the <a href="http://someband.bombplates.com/user" class="external-link" rel="nofollow">someband.bombplates.com/user</a></p><p>go to <a href="http://someband.bombplates.com/admin/settings/file-system" class="external-link" rel="nofollow">someband.bombplates.com/admin/settings/file-system</a></p><p>Update the file system path to sites/<a href="http://someband.bombplates.com/files" class="external-link" rel="nofollow">someband.bombplates.com/files</a></p><p>Go to <a href="http://someband.bombplates.com/admin/build/themes" class="external-link" rel="nofollow">someband.bombplates.com/admin/build/themes</a></p><p>Find LiveSite; set it to active and default; submit the form.</p><p>Update the file paths in the database</p><p>Get DB credentials from sites/<a href="http://someband.bombplates.com/manual_db.php" class="external-link" rel="nofollow">someband.bombplates.com/manual_db.php</a></p><div>$ echo 'SELECT fid, filepath FROM files;' &gt; ~/tmp/dump-files.sql</div><div>$ mysql -u someband_user -pPASSWORD someband_db &lt; ~/tmp/dump-files.sql &gt; ~/tmp/someband.files.sql</div><div>$ vi ~/tmp/someband.files.sql</div><div>   :%s/\([0-9]\+\)\ssites.<a href="http://www.someband.com" class="external-link" rel="nofollow">www.someband.com</a>.\(.*\)/UPDATE files SET filepath=&quot;sites\/<a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a>\/\2&quot; WHERE fid=\1;</div><div>$ mysqldump --add-drop-table -u someband_user -pPASSWORD someband_db &gt;  ~/tmp/someband.backup.sql</div><div>$ mysql -u someband_user -pPASSWORD someband_db &lt;  ~/tmp/someband.files.sql</div><p>Flush the cache</p><p>Alert the user that their site is fixed</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

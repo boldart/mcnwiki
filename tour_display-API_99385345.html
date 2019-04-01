@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : tour_display API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : tour_display API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>tour_display module hooks<br/> - Hooks for integrating with the tour display system, this allows modules to list shows on the tour page, tour management page, and tour xml feed</p><p>hook_tour_display_fetch_shows<br/>  Parameters:<br/>    $scope =&gt; string - one of 'all', 'past', 'future', 'xml', or 'admin'<br/>  Returns:<br/>    array() -c of elements per hook_tour_display_fetch_single<br/>  Description:<br/>    Gather and sort all of the details for upcoming tours that this module is responsible for. $scope allows shows to only display in specific contexts (e.g. upcoming shows should not be displayed on a &quot;past&quot; shows page, BandPage shows cannot be included in the XML feed, etc.)</p><p>hook_tour_display_fetch_single<br/>  Params:<br/>    $id =&gt; string - a tour event's unique ID (e.g. a nid or &quot;bandpage_1234&quot;)<br/>  Returns:<br/>    array (     <br/>      'id' =&gt; string - unique ID for this event, recommended to be a simple int prefaced with a module name (e.g. bandpage_17), a drupal nid, or a guid<br/>      'title' =&gt; string - optional human-readable name for this show (e.g. [date] at [venue] in [city])<br/>      'time' =&gt; array(<br/>        'timestamp' =&gt; int - timestamp<br/>        'print time' =&gt; string - human-readable time<br/>        'year' =&gt; string - year of event<br/>        'weekday' =&gt; string - day of the week<br/>       'day' =&gt; string - day of the month<br/>       'month' =&gt; string - month number<br/>       'month name' =&gt; string - month name<br/>      )<br/>      'location' =&gt; array(<br/>       'city' =&gt; string - city name<br/>       'region' =&gt; string - state/province/region name<br/>       'country' =&gt; string - country name<br/>       'address' =&gt; string - street address<br/>       'postal code' =&gt; string - zip/postal code<br/>      )<br/>      'venue' =&gt; array(<br/>       'name' =&gt; string - venue name<br/>       'url' =&gt; string - venue's URL<br/>       'phone' =&gt; string - phone number<br/>     )<br/>      'link' =&gt; array(<br/>       'text' =&gt; string - per the l() function<br/>       'url' =&gt; string - per the l() function<br/>       'opt' =&gt; string - per the l() function<br/>     )<br/>      'details' =&gt; array(<br/>       'body' =&gt; string - body text<br/>       'teaser' =&gt; string - abbreviated version of body<br/>       'price' =&gt; string - ticket price<br/>       'ticket link' =&gt; string - url to buy tickets from<br/>       artists' =&gt; array() - strings of artist names<br/>      )<br/>      'actions' =&gt; string - 'text to display on the admin form including edit/delete links'<br/>    )<br/>  Description:<br/>    Retreive detailed information about a single tour event.</p><p>hook_tour_display_edit_event_form<br/>  Params: <br/>    $id =&gt; string - a tour event's unique ID (e.g. a nid or &quot;bandpage_1234&quot;)<br/>    $form_state =&gt; array - per drupal's form API<br/>  Returns:<br/>    array - $form array per the drupal forms API (or NULL)<br/>  Description:<br/>    Generate an edit form including validate, submit, etc functions as needed. A submit button will be appended to the form unless $form['#submit_button_exists'] is set</p><p>hook_tour_display_alter<br/>  Params:<br/>    &amp;$data =&gt; array - per drupal_alter (will functionally be an array of rows per theme_table) e.g.<br/>      array(0 =&gt; array('data' =&gt; array(0 =&gt; array('data' =&gt; '1/1/1111', 'class' =&gt; 'tour-date'))))<br/>  Returns:<br/>    None (edits input passed by reference)<br/>  Description:<br/>    Allow other modules to alter tour dates before they are displayed.</p></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

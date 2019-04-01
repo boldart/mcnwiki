@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : BandsX php Configuration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Creating-a-Band-Site-Hosting-Server_99287098.html">Creating a Band Site Hosting Server</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : BandsX php Configuration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This is how PHP should be configured on new band site hosting servers</p><p>See also: <a href="https://intranet.devmcn.com/documentation/creating-band-site-hosting-server" class="external-link" rel="nofollow">Creating a Band Site Hosting Server</a></p><p>Install PHP if it's not there yet</p><pre># yum install php</pre><p>Set max file size upload.<br/>edit (as root) /etc/php.ini</p><p>set include_path, post_max_size, memory_limit, and upload_max_filesize</p><p>include_path = &quot;.:/var/www/include:./<a href="http://include/usr/share/pear:/usr/share/php" class="external-link" rel="nofollow">include:/usr/share/pear:/usr/share/php</a>&quot;<br/>post_max_size = 96M<br/>upload_max_filesize = 96M<br/>max_file_uploads = 32<br/>memory_limit = 256M</p><p>Configure sendmail</p><p>sendmail_path = /usr/sbin/sendmail -t -i <a rel="nofollow">-fsupport@bandsX.bombplates.com</a></p><p>Some other important configuration options:</p><p>safe_mode = Off<br/>expose_php = Off</p><p>Include some modules</p><p style="margin-left: 40.0px;"># echo '; Enable APC module<br/>&gt; extension=<a href="http://apc.so" class="external-link" rel="nofollow">apc.so</a><br/>&gt; apc.shm_size=&quot;64&quot;' &gt; /etc/php.d/apc.ini<br/># echo '; Enable File Info module<br/>&gt; extension=<a href="http://fileinfo.so" class="external-link" rel="nofollow">fileinfo.so</a>' &gt; /ect/php.d/fileinfo.ini<br/># echo '; Enable Upload Progress module<br/>&gt; extension=<a href="http://uploadprogress.so" class="external-link" rel="nofollow">uploadprogress.so</a>' &gt; /etc/php.d/uploadprogress.ini</p><p>Install php mbstring, fileinfo, apc, and uploadprogress</p><p># yum install php-mbstring<br/># yum install php-mysql<br/># yum install gcc<br/># yum install pcre-devel<br/># yum install php-devel php-pear<br/># yum install php-pecl-apc php-pecl-imagick file-devel php-gd php-fileinfo</p><p><br/># pecl install uploadprogress</p><p>Some other cleanup and restart apache:</p><p># /etc/init.d/http restart</p><p>&quot;Shoot! One of the pecls failed!&quot;</p><p style="margin-left: 40.0px;"># mkdir ~/tmp<br/># cd ~/tmp<br/># wget <a href="http://pecl.php.net/get/PACKAGENAME" class="external-link" rel="nofollow">http://pecl.php.net/get/PACKAGENAME</a><br/># tar -xvzf PACKAGENAME-VERSION<br/># cd PACKAGENAME-VERSION<br/># phpize PACKAGENAME<br/># ./configure<br/># make<br/># cp modules/<a href="http://PACKAGENAME.so" class="external-link" rel="nofollow">PACKAGENAME.so</a> /usr/lib[64]/php/modules/</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : BandsX httpd Configuration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Creating-a-Band-Site-Hosting-Server_99287098.html">Creating a Band Site Hosting Server</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : BandsX httpd Configuration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>These are instructions for how to configure the HTTPD service on a Bombplates band site hosting server.<br/><br/>See also: <a href="https://intranet.devmcn.com/documentation/creating-band-site-hosting-server" class="external-link" rel="nofollow">Creating a Band Site Hosting Server</a></p><p>Install some modules</p><pre># yum install mod_ssl</pre><p>edit /etc/httpd/conf/httpd.conf<br/><br/>Make sure it includes (at the end)</p><pre>#individual site rewrite rules
+RewriteEngine On
+</pre><p><br/>And (with the other module loads)</p><pre>LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule filter_module modules/mod_filter.so
+</pre><p><br/>In the &lt;Directory &quot;/var/www/html&quot;&gt; block</p><pre>AllowOverride All
+
+</pre><p>Update any instances of MaxRequestsPerChild to prevent memory leaks.</p><pre>MaxRequestsPerChild 4096</pre><p>Enable virtual hosts on port 80 by uncommenting out (or inserting)</p><pre style="margin-left: 40.0px;">NameVirtualHost *:80
+</pre><div>Configure compression (per <a href="https://github.com/h5bp/server-configs-apache/blob/master/src/web_performance/compression.conf" class="external-link" rel="nofollow">https://github.com/h5bp/server-configs-apache/blob/master/src/web_perfor...</a>)</div><pre>&lt;IfModule mod_deflate.c&gt;
+  &lt;IfModule mod_setenvif.c&gt;
+    &lt;IfModule mod_headers.c&gt;
+      SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+      RequestHeader append Accept-Encoding &quot;gzip,deflate&quot; env=HAVE_Accept-Encoding
+    &lt;/IfModule&gt;
+  &lt;/IfModule&gt;
+  &lt;IfModule mod_filter.c&gt;
+    AddOutputFilterByType DEFLATE &quot;application/atom+xml&quot; \
+      &quot;application/javascript&quot; \
+      &quot;application/json&quot; \
+      &quot;application/ld+json&quot; \
+      &quot;application/manifest+json&quot; \
+      &quot;application/rdf+xml&quot; \
+      &quot;application/rss+xml&quot; \
+      &quot;application/schema+json&quot; \
+      &quot;application/vnd.geo+json&quot; \
+      &quot;application/vnd.ms-fontobject&quot; \
+      &quot;application/x-font-ttf&quot; \
+      &quot;application/x-javascript&quot; \
+      &quot;application/x-web-app-manifest+json&quot; \
+      &quot;application/xhtml+xml&quot; \
+      &quot;application/xml&quot; \
+      &quot;font/eot&quot; \
+      &quot;font/opentype&quot; \
+      &quot;image/bmp&quot; \
+      &quot;image/svg+xml&quot; \
+      &quot;image/vnd.microsoft.icon&quot; \
+      &quot;image/x-icon&quot; \
+      &quot;text/cache-manifest&quot; \
+      &quot;text/css&quot; \
+      &quot;text/html&quot; \
+      &quot;text/javascript&quot; \
+      &quot;text/plain&quot; \
+      &quot;text/vcard&quot; \
+      &quot;text/vnd.rim.location.xloc&quot; \
+      &quot;text/vtt&quot; \
+      &quot;text/x-component&quot; \
+      &quot;text/x-cross-domain-policy&quot; \
+      &quot;text/xml&quot;
+  &lt;/IfModule&gt;
+  &lt;IfModule mod_mime.c&gt;
+    AddEncoding gzip svgz
+  &lt;/IfModule&gt;
+&lt;/IfModule&gt;
+</pre><div>Restart Apache and ensure it auto-starts on reboot</div><div><pre style="margin-left: 40.0px;"># /etc/init.d/httpd restart
+# /sbin/chkconfig httpd on
+</pre></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

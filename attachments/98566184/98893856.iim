@@ -1,0 +1,9 @@
+VERSION BUILD=8920312 RECORDER=FX
+TAB T=1
+URL GOTO={{site}}/manage/users/add
+TAG POS=1 TYPE=INPUT:TEXT FORM=ID:band-users-add ATTR=ID:edit-name CONTENT={{name}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ID:band-users-add ATTR=ID:edit-mail CONTENT={{mail}}
+TAG POS=1 TYPE=INPUT:PASSWORD FORM=ID:band-users-add ATTR=ID:edit-pass-pass1 CONTENT={{pass}}
+TAG POS=1 TYPE=INPUT:PASSWORD FORM=ID:band-users-add ATTR=ID:edit-pass-pass2 CONTENT={{pass}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=ID:band-users-add ATTR=ID:edit-fan-club-expiration-datepicker-popup-0 CONTENT={{membership}}
+TAG POS=1 TYPE=INPUT:SUBMIT FORM=ID:band-users-add ATTR=ID:edit-submit

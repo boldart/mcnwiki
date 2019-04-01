@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : Drupal Hacks - Band Sites</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : Drupal Hacks - Band Sites
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>We've made various modifications to the drupal core and 3rd-party modules. Most of these could eventually be moved into modules, but until then, here's a list of all of them on the band sites.</p><p> Some of these changes can also be found in more-easily-applied <a style="text-decoration: none;" href="https://www.assembla.com/spaces/bombplates/documents/bOizySYE0r4zSqacwqjQYw/download/bOizySYE0r4zSqacwqjQYw" class="external-link" rel="nofollow">patch files</a>.</p><pre style="margin-left: 40.0px;">/* Edits to Drupal Core and Custom Modules*/
+
+***** admin_theme.module *****
+138 - hook_init - don't override mobile theme
+deactivates all custom_themes, not just admin!
+This is now a known issue. Watch for update.
+http://drupal.org/node/829352
+- if (!user_access('access admin theme') || $admin_theme_disallow){
++ if ((!user_access('access admin theme') || $admin_theme_disallow)
++ &amp;&amp; ($GLOBALS['custom_theme'] == variable_get('admin_theme',0) || !$GLOBALS['custom_theme'])
++ ){
+168 - seriously, don't override mobile theme!
+- if ($admin_theme) {
++ if ($admin_theme &amp;&amp; !$GLOBALS['custom_theme']) {
+
+*** captcha/captcha.module ***
+LINE 140 hook_cron changed to hook_alt_cron_slow
+-function captcha_cron() {
++function captcha_alt_cron_slow() {
+  // remove challenges older than 1 day
+  db_query('DELETE FROM {captcha_sessions} WHERE timestamp &lt; %d', time() - 60*60*24);
++ return array('captcha' =&gt; TRUE);
+}
+
+*** contact.admin.inc ***
+Edit wording &quot;Category&quot; to &quot;Contact&quot; etc line 40
+
+*** contact.pages.inc ***
+LINE 14 Don't cache the contact form
+  global $user
++ $GLOBALS['conf']['cache'] = FALSE;
+
+*** date/date_timezone/date_timezone.module ***
+hook_cron changed to hook_alt_cron_slow
+LINE 223 - alt_cron_slow
+-function date_timezone_cron() {
++function date_timezone_alt_cron_slow() {
+LINE 229 - alt_cron_slow
+  }
++ return array('date_timezone' =&gt; TRUE);
+}
+
+*** media_youtube/themes/media_youtube.theme.inc ***
+Make sure URLs are protocol relative
+LINE 38
++  $variables['url'] = isset($variables['url']) ? $variables['url'] : &quot;//www.youtube.com/v/$video_id&quot;;
+-  $variables['url'] = isset($variables['url']) ? $variables['url'] : &quot;http//www.youtube.com/v/$video_id&quot;;
+
+*** media_vimeo/themes/media_vimeo.theme.inc ***
+Make sure URLs are protocol-relative
+LINE 59
++ $variables['iframe_url'] = url('//player.vimeo.com/video/' . $variables['video_code'],  array('query' =&gt; $variables['query']));
+- $variables['iframe_url'] = url('http://player.vimeo.com/video/' . $variables['video_code'], array('query' =&gt; $variables['query']));
+
+*** hierarchical_select ***
+LINE 345 - module/hs_taxonomy.module add fieldset if &gt; 10
+- if (count($form['taxonomy']) &gt; 1) {
++ if (count($form['taxonomy']) &gt; 10) {
+
+*** image_fupload ***
+** image_fupload/includes/images.previewlist.imagefield.inc**
+LINE 20
++ foreach ($field_image['widget']['fupload_previewlist_field_settings'] as $key=&gt;$value) {
+- foreach ($field_image['widget']['fupload_previewlist_field_settings'] as $key) {
+LINE 22
++ if ($key &amp;&amp; $field_image['widget']['fupload_previewlist_field_settings'][$key] != FALSE)
+- if ($field_image['widget']['fupload_previewlist_field_settings'][$key] != FALSE)
+** swfupload/handlers.js **
+LINE 116
+- var response = Drupal.parseJson(serverData); // parse server response
++ var response = eval('(' + serverData + ');'); // parse server response
+
+*** imagecache ***
+** imagecache_actions.inc **
+@@ -66,7 +66,20 @@ function imagecache_scale_image(&amp;$image, $data) {
+  * ImageCache Scale and Crop
+  */
+ function imagecache_scale_and_crop_form($data = array()) {
+-  return imagecache_resize_form($data);
++  $form = imagecache_resize_form($data);
++  $form['width_upcrop'] = array(
++    '#type' =&gt; 'checkbox',
++    '#default_value' =&gt; (isset($data['width_upcrop'])) ? $data['width_upcrop'] : 0,
++    '#title' =&gt; t('Allow width upcropping'),
++    '#description' =&gt; t('Let crop make images wider than their original size'),
++  );
++  $form['height_upcrop'] = array(
++    '#type' =&gt; 'checkbox',
++    '#default_value' =&gt; (isset($data['height_upcrop'])) ? $data['height_upcrop'] : 0,
++    '#title' =&gt; t('Allow height upcropping'),
++    '#description' =&gt; t('Let crop make images taller than their original size'),
++  );
++  return $form;
+ }
+ 
+ function theme_imagecache_scale_and_crop($element) {
+@@ -75,6 +88,12 @@ function theme_imagecache_scale_and_crop($element) {
+ 
+ 
+ function imagecache_scale_and_crop_image(&amp;$image, $data) {
++  if ((!isset($data['height_upcrop']) || !$data['height_upcrop']) &amp;&amp; $image-&gt;info['height'] &lt; $data['height']) {
++    $data['height'] = $image-&gt;info['height'];
++  }
++  if ((!isset($data['width_upcrop']) || !$data['width_upcrop']) &amp;&amp; $image-&gt;info['width'] &lt; $data['width']) {
++    $data['width'] = $image-&gt;info['width'];
++  }
+   if (!imageapi_image_scale_and_crop($image, $data['width'], $data['height'])) {
+     watchdog('imagecache', 'imagecache_scale_and_crop failed. image: %image, data: %data.', array('%image' =&gt; $image-&gt;source, '%data' =&gt; print_r($data, TRUE)), WATCHDOG_ERROR);
+
+
+*** jquery_update ***
+** replace/tabledrag.js **
+LINE 174 - see https://drupal.org/node/893538
+-  if ($('td:first .indentation:last', item).after(handle).size()) {
++  if (self.indentEnabled &amp;&amp; $('td:first .indentation:first', item).size() &amp;&amp; $('td:first .indentation:last', item).after(handle).size()) {
+** replace/jquery.form.js **
+Replace with the minified version of 3.46 from http://malsup.com/jquery/form/#download
+** jquery_update.module **
+LINE 108 - fix regex per https://drupal.org/comment/5509816#comment-5509816
+ function jquery_update_get_version($jquery_path = NULL) {
+   $version = 0;
+-  $pattern = '# * jQuery JavaScript Library v([0-9\.a-z]+)#';
++  $patterns = array(
++    'jQuery (\d[\w\d\.]+)', //  * jQuery 1.2.6 - New Wave Javascript
++    'jQuery JavaScript Library v([\w\d\.]+)', // jQuery JavaScript Library v1.3.2/1.7.1
++    'jQuery v([\w\d\.]+)' // /*! jQuery v1.7.1 jquery.com | jquery.org/license */
++  );
++  $pattern = '/' . implode('|', $patterns) . '/';
+LINE 123 - continuation of above patch
+   if (preg_match($pattern, $jquery, $matches)) {
+-    $version = $matches[1];
++    for ($i = 1; $i &lt;= count($patterns); ++$i) {
++	    if (!$matches[$i]) continue;
++		  $version = $matches[$i];
++		  break;
++	  }
+   }
+
+*** link.module ***
+LINE 224: insert our custom sanitization
+  foreach ($items as $delta =&gt; $value) {
++   if (function_exists('bomplates_url_exceptions')) { bomplates_url_exceptions($items[$delta]['url']); }
+    _link_validate($items[$delta], $delta, $field, $node, $optional_field_found);
+  }
+LINE 237: insert our custom sanitization
+  foreach ($items as $delta =&gt; $value) {
++   if (function_exists('bomplates_url_exceptions')) { bomplates_url_exceptions($items[$delta]['url']); }
+    _link_process($items[$delta], $delta, $field, $node);
+  }
+
+*** multiselect.js ***
+LINE 34: Pick the correct selectors when users click the add/remove buttons
+-    unselclass = '.' + this.id + '_unsel';
+-    selclass = '.' + this.id + '_sel';
++    ul = $(this).parent();
++    selector = ul.siblings('#multiselect_available').first().children('.multiselect-processed');
++    unselclass = '.' + selector.attr('id') + '_unsel';
++    selclass = '.' + selector.attr('id') + '_sel';
+     $(unselclass).moveSelectionTo($(selclass));
+   });
+   // Moves selection if remove is clicked to selected box
+   $('li.multiselect_remove:not(.multiselect-remove-processed)', context).addClass('multiselect-remove-processed').click(function() {
+-    unselclass = '.' + this.id + '_unsel';
+-    selclass = '.' + this.id + '_sel';
++    ul = $(this).parent();
++    selector = ul.siblings('#multiselect_available').first().children('.multiselect-processed');
++    unselclass = '.' + selector.attr('id') + '_unsel';
++    selclass = '.' + selector.attr('id') + '_sel';
+
+
+*** plupload.module ***
+LINE 368: invoke functions manually to ensure pass-by-reference
+-  module_invoke_all('plupload_node_presave', $node, $options);
++  foreach (module_implements('plupload_node_presave') AS $module) {
++    $function = $module . '_plupload_node_presave';
++    $function($node, $options);
++  }
+   node_save($node);
++  foreach (module_implements('plupload_node_postsave') AS $module) {
++    $function = $module . '_plupload_node_postsave';
++    $function($node, $options);
++  }
+-  module_invoke_all('plupload_node_postsave', $node, $options);
+
+*** taxonomy_batch_operations.module ***
+LINE: 175 remove link
+$form['multiedit'][$term-&gt;tid]['name'] = array(
+'#value' =&gt; $term-&gt;name,
+);
+BELOW THAT, CHANGE LINKS TO IMAGES
+$form['multiedit'][$term-&gt;tid]['operations'] = array(
+'#value' =&gt; '&lt;a href=&quot;/admin/content/taxonomy/edit/term/'.$term-&gt;tid.'?destination=admin%2Fcontent%2Ftaxonomy%2F1%2Fterms&quot;&gt;&lt;img src=&quot;/misc/admin/page_white_edit.png&quot; alt=&quot;Edit&quot; title=&quot;Edit&quot; width=&quot;16&quot; height=&quot;16&quot; border=&quot;0&quot;&gt;&lt;/a&gt; &lt;a href=&quot;/admin/content/taxonomy/delete/term/'.$term-&gt;tid.'?destination=admin%2Fcontent%2Ftaxonomy%2F1%2Fterms&quot;&gt;&lt;img src=&quot;/misc/admin/action_delete.png&quot; alt=&quot;Delete&quot; title=&quot;Delete&quot; width=&quot;16&quot; height=&quot;16&quot; border=&quot;0&quot;&gt;&lt;/a&gt;',
+);
+
+*** wysiwyg/editors/tinymce.inc ***
+LINE 537 - makes it so tinymce does not strip out iframes.
+),
++ 'iframe' =&gt; array(
++ 'extensions' =&gt; array('iframe' =&gt; t('Iframe')),
++ 'extended_valid_elements' =&gt; array('iframe[src|width|height|frameborder|scrolling]'),
++ 'load' =&gt; FALSE,
++ 'internal' =&gt; TRUE,
++ ),
+'table' =&gt; array(
+
+##################################core/webroot changes####################################
+
+*********/modules/dblog/dblog.module********
+LINE 102 - change to alt cron slow - watchdog DB takes 20 days or so to fill up anyway
++function dblog_alt_cron_slow() {
+-function dblog_cron() {
+LINE 107 (alt_cron_slow)
++ return array('dblog' =&gt; TRUE);
+}
+
+******/modules/node/node.module*****
+LINE 120 - change to alt_cron_slow - deleting db entries based on 30 day old timestamps
+-function node_cron() {
++function node_alt_cron_slow() {
+  db_query('DELETE FROM {history} WHERE timestamp &lt; %d', NODE_NEW_LIMIT);
++ return array('node' =&gt; TRUE);
+}
+
+*****/modules/update/update.module*****
+LINE 295
++function update_alt_cron_slow() {
+-function update_cron() {
+LINE 305 (alt_cron_slow)
+  }
++ return array('update' =&gt; TRUE);
+}
+
+***** bootstrap.inc (includes/bootstrap.inc) *****
+LINE 432
+- $base_url = $base_root .= '://'. $_SERVER['HTTP_HOST'];
++ $base_url = $base_root .= '://' . (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
+LINE 446
++ //bombplates change - settings.php's cookie_domain doesn't play nicely with our
++ // low-standards reverse proxy. We want to accept both proxied and unproxied requests
++ // Thus, we have to determine here which they made
++ $cookie_domain = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? '.bombplates.com' : $cookie_domain;
+if ($cookie_domain) {
+
+
+***** common.inc (includes/common.inc) *****
+LINE 1661 - make l() fail gracefully
+  // Merge in defaults
++ if (!is_array($options)) { $options = array(); }
+  $options += array(
+LINE 2571
+function drupal_to_js($var) {
++  if(function_exists('json_encode')) {
++    return str_replace(array('&lt;', '&gt;', '&amp;'), array('\u003c', '\u003e', '\u0026'), json_encode($var));
++  }
+
+***** menu.inc (includes/menu.inc) *****
+LINE 504 - _menu_item_localize
+elseif ($callback) {
++ //Verify that the title callback function exists
++ if (!function_exists($callback)) {require_once($item['file']);}
+
+****** /includes/form.inc ******
+LINE 619 - Remove the check to ensure this form is only validated once
+function drupal_validate_form($form_id, $form, &amp;$form_state) {
+- static $validated_forms = array();
+-
+- if (isset($validated_forms[$form_id])) {
+-   return;
+- }
+  // If the session token was set by drupal_prepare_form(), ensure that it
+  // matches the current user's session.
+  if (isset($form['#token'])) {
+    if (!drupal_valid_token($form_state['values']['form_token'], $form['#token'])) {
+      // Setting this error will cause the form to fail validation.
+      ...
+    }
+  }
+  _form_validate($form, $form_state, $form_id);
+- $validated_forms[$form_id] = TRUE;
+
+***** filter (/modules/filter/filter.module) ******
+LINE 165 - filter cache is 24 hours, so hourly cleaning is unneccessary
++function filter_alt_cron_slow() {
+-function filter_cron() {
+  cache_clear_all(NULL, 'cache_filter');
++ return array('filter' =&gt; TRUE);
+}
+
+LINE 1121 - don't block style attributes in HTML
+- $skip = ($attrname == 'style' || substr($attrname, 0, 2) == 'on');
++ $skip = substr($attrname, 0, 2) == 'on';
+
+***** node (/modules/node/node.module) *****
+LINE 1489 - Front page title should default to band name
+- 'title' =&gt; 'Content',
++ 'title callback' =&gt; 'variable_get',
++ 'title arguments' =&gt; array('site_name', 'Content'),
+
+****** /modules/user/user.module *******
+LINE 240 (user_save) add:
+if ($key == 'pass' &amp;&amp; !empty($value)) {
+$query .= &quot;$key = '%s', &quot;;
+$v[] = md5($value);
+}
++ // if they passed in a pass that has already been hashed
++ else if ($key == 'passh' &amp;&amp; !empty($value)) {
++ $query .= &quot;pass = '%s', &quot;;
++ $v[] = $value;
++ }
+LINE 1095 - capitalize Account
++ 'title' =&gt; 'My Account',
+- 'title' =&gt; 'My account',
+LINE 1243 - capitalize Account
++ return t('My Account');
+- return t('My account');
+LINE 1551 - change E-mail address description
+- '#description' =&gt; t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
++ '#description' =&gt; t('Important system messages (such as password resets)will be sent to this address. This address will not be displayed publicly.'),
+LINE 2180 - make sure password emails use real urls
+  global $base_url;
++ orig_base = $base_url;
++ $base_url = preg_replace('!^//!', 'http://', $orig_base);
+  $tokens = array(
+LINE 2196 - Revert base_url
+  }
++ $base_url = $orig_base;
+  return $tokens;
+
+**** /modules/user/user.pages.inc ****
+LINE 237 - Delete title override in user_edit
+function user_edit($account, $category = 'account') {
+- drupal_set_title(check_plain($account-&gt;name));
+
+***** /modules/profile/profile.module ******
+LINE 242 - user_save($user,$changes,$category) DELETES any fields in $category
+that aren't explicitly set. This is silly behavior.
+if (_profile_field_serialize($field-&gt;type)) {
+$edit[$field-&gt;name] = serialize($edit[$field-&gt;name]);
+}
++ if (isset($edit[$field-&gt;name])) {
++   db_query(&quot;DELETE FROM {profile_values} WHERE fid = %d AND uid = %d&quot;, $field-&gt;fid, $user-&gt;uid);
++   db_query(&quot;INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')&quot;, $field-&gt;fid, $user-&gt;uid, $edit[$field-&gt;name]);
++ }
+- db_query(&quot;DELETE FROM {profile_values} WHERE fid = %d AND uid = %d&quot;, $field-&gt;fid, $user-&gt;uid);
+- db_query(&quot;INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')&quot;, $field-&gt;fid, $user-&gt;uid, $edit[$field-&gt;name]);
+// Mark field as handled (prevents saving to user-&gt;data).
+
+***** /modules/taxonomy/taxonomy.admin.inc *****
+LINE 662 - function taxonomy_form_term within $form['identification']['name']
+- '#title' =&gt; t('Term name'),
++ '#title' =&gt; t($vocabulary-&gt;name),
+
+LINE 724 - the end of taxonomy_form_term
+- else {
++ else if (!$_REQUEST['destination']){
+
+
+***** /modules/comment/comment.module *****
+LINE 490 - function comment_form_alter(&amp;$form, $form_state, $form_id)
+$form['comment'] = array(
++ '#prefix' =&gt; user_access('be an admin') ? '' : '&lt;div id=&quot;comment-settings&quot;&gt;',
++ '#suffix' =&gt; user_access('be an admin') ? '' : '&lt;/div&gt;',
+
+LINE 574 - function comment_form_alter(&amp;$form, $form_state, $form_id) //again
+$form['comment_settings'] = array(
++ '#prefix' =&gt; user_access('be an admin') ? '' : '&lt;div id=&quot;comment-settings&quot;&gt;',
++ '#suffix' =&gt; user_access('be an admin') ? '' : '&lt;/div&gt;',
+
+line 1812 - If user cannot post comments and cannot create an account to do so, don't prompt them to log in
+// Only admins can add new users, no public registration
+- return t('&lt;a href=&quot;@login&quot;&gt;Login&lt;/a&gt; to post comments', ...
++ return '';
+
+***** /modules/upload/upload.module *****
+LINE 237 - change the description
++ '#description' =&gt; t('Changes made to the attachments are not permanent until you save this post. '),
+- '#description' =&gt; t('Changes made to the attachments are not permanent until you save this post. The first &quot;listed&quot; file will be included in RSS feeds.'),
+LINE 359 - stop double-encoding attachment urls
+-      $rows[] = array(l($text, $href), format_size($file-&gt;filesize));
++      $rows[] = array(l($text, $href, array('external' =&gt; TRUE)), format_size($file-&gt;filesize));
+LINE 482 - add a class to checkboxed
+-      $form['files'][$key]['remove'] = array('#type' =&gt; 'checkbox', '#default_value' =&gt; !empty($file-&gt;remove));
+-      $form['files'][$key]['list'] = array('#type' =&gt; 'checkbox',  '#default_value' =&gt; $file-&gt;list);
++      $form['files'][$key]['remove'] = array('#type' =&gt; 'checkbox', '#default_value' =&gt; !empty($file-&gt;remove), '#attributes' =&gt; array('class' =&gt; 'form-checkbox-switchery'));
++      $form['files'][$key]['list'] = array('#type' =&gt; 'checkbox',  '#default_value' =&gt; $file-&gt;list, '#attributes' =&gt; array('class' =&gt; 'form-checkbox-switchery'));
+
+***** /modules/system/system.module *****
+LINE 1108 - Change &quot;Save configuration&quot; button to &quot;Save&quot; in system_settings_form
++ $form['buttons']['submit'] = array('#type' =&gt; 'submit', '#value' =&gt; t('Save') );
+- $form['buttons']['submit'] = array('#type' =&gt; 'submit', '#value' =&gt; t('Save configuration') );
+
+******* /cache.php *********
+added
+
+****** /robots.txt ********
+LINE 22
+# Directories
++Disallow: /downloads/
++Disallow: /node/
+LINE 50+ removed all non-clean url directives
+</pre></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

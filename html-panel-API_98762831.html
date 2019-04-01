@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : html panel API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : html panel API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>html_panel module - Hooks created by the html_panel module<br/> - These hooks pertain to management of custom_widget and custom_page content.</p><p>hook_html_panel_make_widgets<br/>  Parameters:<br/>    $delta =&gt; optional int - only return result['widgets'][$delta]<br/>  Returns:<br/>    array(<br/>      'module_name' =&gt; array(<br/>        0.. OR $delta =&gt; array(<br/>          'title' =&gt; 'Human readable title',<br/>          'body' =&gt; '&lt;p&gt;HTML body&lt;/p&gt;',<br/>          'location' =&gt; 1...4, //default location<br/>          'weight' =&gt; -50...50, // default weight<br/>          'settings_path' =&gt; 'manage/path', // path to settings/management page<br/>          'enabled' =&gt; 0|1,  // is this widget enabled by default?<br/>          'display_title' =&gt; 0|1, // Is the display_title option enabled by default?<br/>        )<br/>      )<br/>    )<br/>  Description:<br/>    Create html_panel widgets associated with this module.</p><p>hook_html_panel_uncacheable_widgets<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    array(<br/>      'module_name' =&gt; array(0, 3, ...),<br/>    )<br/>  Description<br/>    Specify widgets which should be rebuilt every time they are displayed. module_name must match an implementation of hook_html_panel_make_widgets. The integers in the sub-array must match widget deltas.</p><p>html_panel_update_widget<br/>  Parameters:<br/>    $module =&gt; 'module_name', (optional)<br/>    $delta =&gt; optional int - passed through to hook_html_panel_make_widgets<br/>  Returns:<br/>  Description:<br/>    Tells html_panel that 1+ of this module's widgets are outdated and hook_html_panel_make_widgets needs to be called. Call this whenever something happens that may change the contents of a widget (e.g. updating their mailing_list)</p><p>hook_html_panel_update_widget<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    none<br/>  Description:<br/>    This hook is invoked whenever in html_panel_init when the html_panel_widget_outdated variable is detected. Modules can use it to detect if their on widgets are outdated and force them to be updated by invoking html_panel_update_widget.</p><p>html_panel_pages<br/>  Parameters:<br/>  Returns:<br/>    array(<br/>      'path/to/content' =&gt; 'Human-readable Name',<br/>      ...<br/>    )<br/>  Description:<br/>    Return all the publicly-viewable pages associated with this module so<br/>      html_panel_list_pages can display them.</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : Updating custom module code for git n00bs</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : Updating custom module code for git n00bs
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>So you need to tweak some module code on the Bombplates system, eh? Maybe update a module CSS file or swap out an icon or something? Alright. Let's do this thing.</p><p>-------------------------</p><p><strong>STEP 1: go to the codebase</strong></p><pre style="margin-left: 40.0px;"><code>$ ssh MYUSERNAME@DEVSERVER.bombplates.com</code></pre><p>If you don't know your user name, talk to a sysadmin</p><p>Then navigate to the modules directory</p><pre style="margin-left: 40.0px;"><code>$ cd /var/www/html/sites/all/modules</code></pre><p>-------------------------</p><p><strong>STEP 2: Stash local changes</strong></p><pre style="margin-left: 40.0px;"><code>$ git status</code></pre><p>If it displays...</p><pre style="margin-left: 40.0px;"><code># On branch XXXX</code> <code>nothing to commit, working directory clean</code></pre><p>Move on to step 3.</p><p><em>If XXXX is not &quot;develop&quot; or &quot;master&quot;, commit your changes</em></p><p>If git status said...</p><pre style="margin-left: 40.0px;"><code>...
+# Changes not staged for commit
+...
+#    deleted: SOME
+#    deleted: FILES
+#    deleted: FOLDER/</code></pre><p>There are local file deletions to add to git</p><pre style="margin-left: 40.0px;"><code>$ sudo git rm -rf SOME FILES FOLDER</code></pre><p>Then commit the rest of your changes</p><pre style="margin-left: 40.0px;"><code>$ sudo git add .
+$ sudo git commit -m 'tkt#YYYY - description of what these changes are'</code></pre><p><em>If XXXX is &quot;develop&quot; or &quot;master&quot;, stash those changes somewhere else for later review</em></p><pre style="margin-left: 40.0px;"><code>$ mkdir ~/YYYY-ticket-description/
+$ git diff &gt; ~/YYYY-ticket-description/YYYY.diff</code></pre><p>Find any untracked files</p><pre style="margin-left: 40.0px;"><code>$ git status
+...
+# Untracked files:
+...
+#    SOME.FILE
+#    FOLDER/</code></pre><p>And move them.</p><pre style="margin-left: 40.0px;"><code>$ mv SOME.FILE ~/YYYY-ticket-description/
+$ mv FOLDER ~/YYYY-ticket-description/</code></pre><p>Then revert back to the baseline</p><pre style="margin-left: 40.0px;"><code>$ sudo git checkout .</code></pre><p>And tell a developer about ~/YYYY-ticket-description so that they can roll the code into the codebase correctly</p><p>-------------------------</p><p><strong>STEP 3: Start your code changes from the master branch</strong></p><pre style="margin-left: 40.0px;"><code>$ sudo git checkout master</code></pre><p>If it displays...</p><pre style="margin-left: 40.0px;"><code># On branch XXXX</code> <code>nothing to commit, working directory clean</code></pre><p>Skip to step 4</p><p>If it displays...</p><pre style="margin-left: 40.0px;"><code># On branch master
+# Your branch is ahead of 'origin/master' by Y commits, and can be fast-forwarded.
+#   (use &quot;git push&quot; to publish your local commits)</code></pre><p>Push your local changes</p><pre style="margin-left: 40.0px;"><code>$ sudo git push origin master</code></pre><p>If it displays</p><pre style="margin-left: 40.0px;"><code># On branch master
+# Your branch is behind 'origin/master' by Y commits.
+#   (use &quot;git pull&quot; to update your local branch)</code></pre><p>Pull the remote changes</p><pre style="margin-left: 40.0px;"><code>$ sudo git pull origin master</code></pre><p>-------------------------</p><p><strong>STEP 4: Fork your branch</strong></p><pre style="margin-left: 40.0px;"><code>$ sudo git checkout -b TYPE/TKT-DESC</code></pre><p>Where TYPE is hotfix or feature, TKT is the ticket number, and DESC is a brief description of the changes (with no spaces; use underscores or dashes)</p><p>-------------------------</p><p><strong>STEP 5: Make your changes</strong></p><p>Commit your changes frequently</p><pre style="margin-left: 40.0px;"><code>$ sudo git add .
+$ sudo git commit -m 'tkt#TKT description of changes'</code></pre><p>Once all your changes are completed and committed, push them out.</p><pre style="margin-left: 40.0px;"><code>$ sudo git push origin TYPE/TKT-DESC</code></pre><p>-------------------------</p><p><strong>STEP 6: Merge your changes into the development branch</strong></p><pre style="margin-left: 40.0px;"><code>$ sudo git checkout develop
+$ sudo git pull origin develop
+$ sudo git merge origin/TYPE/TKT-DESC
+$ sudo git push origin develop</code></pre><p>-------------------------</p><p><strong>STEP 7: Test &amp; have other people review your changes</strong></p><p>If you need to revise your code changes...</p><pre style="margin-left: 40.0px;"><code>$ sudo git checkout TYPE/TKT-DESC</code></pre><p>Then repeat steps 5 and 6 as needed</p><p>-------------------------</p><p><strong>STEP 8: Deploy to live</strong></p><p>This step may be performed by someone else.</p><pre style="margin-left: 40.0px;"><code>$ sudo git checkout master
+$ sudo git pull origin master
+$ sudo git merge origin/TYPE/TKT-DESC
+$ sudo git push origin master
+$ sudo git checkout develop
+$ exit
+$ ssh MYUSER@BANDSX.bombplates.com
+$ cd /var/www/html/sites/all/modules
+$ sudo git pull origin master</code></pre>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

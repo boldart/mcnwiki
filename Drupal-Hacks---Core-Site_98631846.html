@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : Drupal Hacks - Core Site</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : Drupal Hacks - Core Site
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><em>2018 comment: These notes are for the D6 version of bombplates.com. They are deprecated by the D8 version.</em></p><p>We've made various changes to the Drupal core and 3rd-party modules. A lot of these could (and probably should) eventually be moved into custom modules, but until then, here's the complete list.</p><pre>***** jquery_ui *****
+This module does not ship with the actual jquery ui code
+Copy the folder over
+
+**** sites/all/modules/loggintoboggan/loggintoboggan.module ****
+Remove Messages
+LINE 367 - logintoboggan_user_register_submit
+- // Compose the appropriate user message--admin approvals don't require a validation email.
+- if($reg_pass_set &amp;&amp; variable_get('user_register', 1) == 1) {
+- if ($pre_auth) {
+- $message = t('A validation e-mail has been sent to your e-mail address. In order to gain full access to the site, you will need to follow the instructions in that message.');
+- }
+- else {
+- $message = '';
+- }
+- } else {
+- $message = t('Your password and further instructions have been sent to your e-mail address.');
+- }
+
+
+***** /modules/user/user.module ******
+Allows their first name to be used in the welcome email
+LINE 228 (user_save) add:
+ foreach ($array as $key =&gt; $value) {
+ if ($key == 'pass' &amp;&amp; !empty($value)) {
+ $query .= &quot;$key = '%s', &quot;;
+ $v[] = md5($value);
+ }
++ // if they passed in a pass that has already been hashed
++ else if ($key == 'passh' &amp;&amp; !empty($value))
++ {
++ $query .= &quot;pass = '%s', &quot;;
++ $v[] = $value;
++ }
+LINE 2132- user_mail_tokens
+ function user_mail_tokens($account, $language) {
+ global $base_url;
++ $user = user_load(array('uid'=&gt;$account-&gt;uid));
+ $tokens = array(
++ '!fname' =&gt; $user-&gt;profile_fname,
+ '!username' =&gt; $account-&gt;name,
+ '!site' =&gt; variable_get('site_name', 'Drupal'),
+ '!login_url' =&gt; user_pass_reset_url($account),
+ '!uri' =&gt; $base_url,
+ '!uri_brief' =&gt; preg_replace('!^https?://!', '', $base_url),
+ '!mailto' =&gt; $account-&gt;mail,
+ '!date' =&gt; format_date(time(), 'medium', '', NULL, $language-&gt;language),
+ '!login_uri' =&gt; url('user', array('absolute' =&gt; TRUE, 'language' =&gt; $language)),
+ '!edit_uri' =&gt; url('user/'. $account-&gt;uid .'/edit', array('absolute' =&gt; TRUE, 'language' =&gt; $language)),
+ );
+ if (!empty($account-&gt;password)) {
+ $tokens['!password'] = $account-&gt;password;
+ }
+ return $tokens;
+ }
+ 
+LINE 2218 - _user_password_dynamic_validation
+ drupal_add_js(array(
+ 'password' =&gt; array(
+ 'strengthTitle' =&gt; t('Password strength:'),
+ 'lowStrength' =&gt; t('Low'),
+ 'mediumStrength' =&gt; t('Medium'),
+ 'highStrength' =&gt; t('High'),
+- 'tooShort' =&gt; t('It is recommended to choose a password that contains at least six characters. It should include numbers, punctuation, and both upper and lowercase letters.'),
+- 'needsMoreVariation' =&gt; t('The password does not include enough variation to be secure. Try:'),
++ 'tooShort' =&gt; t('Your password must contain at least six characters. We also recommended that you include numbers, punctuation, and both upper and lowercase letters.'),
++ 'needsMoreVariation' =&gt; t('If you would like to make your password more secure. Try:'),
+ 'addLetters' =&gt; t('Adding both upper and lowercase letters.'),
+ 'addNumbers' =&gt; t('Adding numbers.'),
+ 'addPunctuation' =&gt; t('Adding punctuation.'),
+- 'sameAsUsername' =&gt; t('It is recommended to choose a password different from the username.'),
++ 'sameAsUsername' =&gt; t('Please select a password different from the username.'),
+ 'confirmSuccess' =&gt; t('Yes'),
+ 'confirmFailure' =&gt; t('No'),
+ 'confirmTitle' =&gt; t('Passwords match:'),
+ 'username' =&gt; (isset($user-&gt;name) ? $user-&gt;name : ''))),
+ 'setting');
+ $complete = TRUE;
+
+***** /includes/mail.inc *******
+LINE 128 - Don't send emails that were cancelled in hook_mail_alter (or hook_mail)
+ // Optionally send e-mail.
+- if ($send) {
++ if ($send &amp;&amp; empty($message['cancel'])) {
+ $message['result'] = drupal_mail_send($message);
+
+ // Log errors
+ if (!$message['result']) {
+ watchdog('mail', 'Error sending e-mail (from %from to %to).', array('%from' =&gt; $message['from'], '%to' =&gt; $message['to']), WATCHDOG_ERROR);
+ drupal_set_message(t('Unable to send e-mail. Please contact the site administrator if the problem persists.'), 'error');
+ }
+- }
++ } else {
++ $message['result'] = NULL;
++ }
+</pre>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

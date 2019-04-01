@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : Configuring alternate domains per site</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : Configuring alternate domains per site
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>Musicians are dumb. Often, they will sign up for a hosting service before they've even registered a domain name. Sometimes they'll do it before they've even picked the name of the project. And then they'll register their domain name through GoDaddy, which doesn't support URL redirects.</p><p>When that happens, they'll invariably come to us asking us to update their domain name. Here's how we do that for now.</p><p>For examples. We'll assume that the band signed up as <a href="http://myband.com" class="external-link" rel="nofollow">myband.com</a> (<a href="http://myband.bombplates.com" class="external-link" rel="nofollow">myband.bombplates.com</a>) but ended up registering <a href="http://mybandmusic.com" class="external-link" rel="nofollow">mybandmusic.com</a> instead</p><ol><li>Shell into the server hosting their site.</li><li>Edit the sites vhosts file /media/data/conf.d/sites/<a href="http://myband.bombplates.com" class="external-link" rel="nofollow">myband.bombplates.com</a>.conf (as root)</li><li>Add the new domain(s) to the end of the ServerAlias line (including the www. version)</li><li>Copy the RewriteCond/RewriteRule couplet; use the new domain. Alternatively, you may set the rewrite to redirect to whichever domain the user plans on listing in search engines<br/>e.g.<br/><code>RewriteCond %{HTTP_HOST}  ^(www.)?mybandaltdomain.(com|net)$ [NC]<br/>RewriteRule ^(.*)$ <a href="http://www.myband.com$1" class="external-link" rel="nofollow">http://www.myband.com$1</a> [L,R=301]</code></li><li>If necessary, standardize the whole vhosts file<br/><code><code>RewriteCond %{HTTP_HOST} ^<a href="http://myband.com" class="external-link" rel="nofollow">myband.com</a>$ [NC]<br/>RewriteRule ^(.*)$ <a href="http://www.myband.com$1" class="external-link" rel="nofollow">http://www.myband.com$1</a> [L,R=301]</code></code><p>RewriteCond %{HTTP_HOST} ^(www.)?<a href="http://mybandmusic.com" class="external-link" rel="nofollow">mybandmusic.com</a>$ [NC]<br/>RewriteRule ^(.*)$ <a href="http://www.myband.com$1" class="external-link" rel="nofollow">http://www.myband.com$1</a> [L,R=301]</p><p>&lt;VirtualHost *:80&gt;<br/>  ServerAdmin <a href="mailto:info@myband.bombplates.com" class="external-link" rel="nofollow">info@myband.bombplates.com</a><br/>  DocumentRoot /var/www/html<br/>  ServerName <a href="http://myband.bombplates.com" class="external-link" rel="nofollow">myband.bombplates.com</a><br/>  ServerAlias <a href="http://myband.com" class="external-link" rel="nofollow">myband.com</a> <a href="http://www.myband.com" class="external-link" rel="nofollow">www.myband.com</a> <a href="http://mybandmusic.com" class="external-link" rel="nofollow">mybandmusic.com</a> <a href="http://www.mybandmusic.com" class="external-link" rel="nofollow">www.mybandmusic.com</a><br/>  RewriteEnginge On<br/>  RewriteOptions inherit<br/>&lt;/VirtualHost&gt;</p></li><li>Add a symlink for the new domain<br/><code># cd /var/www/html/sites<br/># ln -s <a href="http://myband.bombplates.com" class="external-link" rel="nofollow">myband.bombplates.com</a> <a href="http://www.mybandmusic.com" class="external-link" rel="nofollow">www.mybandmusic.com</a></code></li><li>Restart httpd</li><li>Update /var/www/include/this_node/sites.php to whitelist the new domain for reCAPTCHA<br/><code>$all_sites['<a href="http://myband.bombplates.com" class="external-link" rel="nofollow">myband.bombplates.com</a>'] = '<a href="http://www.myband.com" class="external-link" rel="nofollow">http://www.myband.com</a>';<br/>$all_sites['<a href="http://www.mybandmusic.com" class="external-link" rel="nofollow">www.mybandmusic.com</a>'] = '<a href="http://myband.bombplates.com" class="external-link" rel="nofollow">http://myband.bombplates.com</a>';</code></li><li>It may take a few minutes for caches to clear</li></ol><p>Here are the existing alternate domain names</p><p>Current</p><pre style="margin-left: 40.0px;">ServerAlias amandawintercountry.com www.amandawintercountry.com amandawintermusic.com www.amandawintermusic.com
+ <code>ServerAlias anacristina.com www.anacristina.com anachristina.com www.anachristina.com
+ ServerAlias austinwebbmusic.com www.austinwebbmusic.com austinwebb.com www.austinwebb.com
+</code> ServerAlias cherryholmes.com cherryholmes.tv www.cherryholmes.tv cherryholmes.us www.cherryholmes.us cherryholmes.net www.cherryholmes.net cherryholmes.biz www.cherryholmes.biz cherryholmesfamilyband.com www.cherryholmesfamilyband.com<code>
+ ServerAlias davidandwhitneymusic.com daveandwhitney.com www.daveandwhitney.com</code>  ServerAlias elizabethlyons.com elizabethlyonsmusic.com www.elizabethlyonsmusic.com ServerAlias emilywestmusic.com emilywestofficial.com www.emilywestofficial.com  ServerAlias jungyouthmusic.com jungyouth.com www.jungyouth.com <code> ServerAlias localhoneyvintage.com lhnashville.com www.lhnashville.com
+ ServerAlias openthecage.com openthecagegear.com www.openthecagegear.com michaelconnorsmusic.com  www.michaelconnorsmusic.com
+ ServerAlias rachelmorganperry.com everettrae.com www.everettrae.com everythingeverett.com www.everythingeverett.com</code>  ServerAlias smokingpopesmusic.com www.smokingpopes.net smokingpopes.net <code> ServerAlias teammartina.com teammusicislove.com www.teammusicislove.com
+ ServerAlias trickpony.com theponiesmusic.com www.theponiesmusic.com</code> ServerAlias whitneyduncanmusic.com whitneyduncan.com www.whitneyduncan.com ServerAlias bgmetalsinc.com www.bgmetalsinc.com bgmetals.com www.bgmetals.com ServerAlias savannahleemusic.com savannahbrymer.com www.savannahbrymer.com ServerAlias mallaryhope.com www.mallaryhope.com mallaryhopemusic.com www.mallaryhopemusic.com</pre><p>Defunct (only on bands2/bands 3)</p><pre style="margin-left: 40.0px;"> ServerAlias ejswanson.com www.ejswanson.org ejswanson.org
+ ServerAlias emilywestmusic.com emilywestofficial.com www.emilywestofficial.com
+ ServerAlias blackfootgypsies.com theblackfootgypsies.com www.theblackfootgypsies.com
+ ServerAlias whitneyduncanmusic.com whitneyduncan.com www.whitneyduncan.com
+ ServerAlias www.westonjamesmusic.com ServerAlias www.janinestange.com
+ ServerAlias www.peopleonahill.com
+ ServerAlias www.fourtwelvemusic.com
+ ServerAlias www.davidashleyonline.com
+ ServerAlias wherethepartyat.com erikdylanmusic.com www.wherethepartyat.com
+ ServerAlias zachdylancountry.com zachdylan.net www.zachdylan.net
+</pre><p>TODO: eventually, we should find a way to automate this. (e.g. we could set up a domain server that points WHATEVER.TLD to <a href="http://www.WHATEVER.TLD" class="external-link" rel="nofollow">www.WHATEVER.TLD</a>)</p></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

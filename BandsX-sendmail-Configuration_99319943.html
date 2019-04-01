@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : BandsX sendmail Configuration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Creating-a-Band-Site-Hosting-Server_99287098.html">Creating a Band Site Hosting Server</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : BandsX sendmail Configuration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This is how sendmail should be configured on new band site hosting servers.</p><p>See also: <a href="https://intranet.devmcn.com/documentation/creating-band-site-hosting-server" class="external-link" rel="nofollow">Creating a Band Site Hosting Server</a></p><pre># yum install sendmail
+# yum install sendmail-cf</pre><p>Stop postfix</p><p><code># /etc/init.d/postfix stop<br/># /etc/init.d/sendmail stop</code><br/> </p><p>edit /etc/mail/<a href="http://submit.mc" class="external-link" rel="nofollow">submit.mc</a><br/>add (If this server is hosted outside the Peak10 ecosystem, the IP address is 68.71.99.148)</p><pre style="margin-left: 40.0px;">define(`confDEF_USER_ID',`8:12')dnl
+define(`confDONT_PROBE_INTERFACES',true)
+define(`confTO_QUEUEWARN_DSN',`')
+MASQUERADE_AS(`bombplates.com')dnl
+FEATURE(masquerade_envelope)dnl
+define(`confTO_QUEUERETURN_DSN',`12h')
+dnl If you use IPv6 only, change [127.0.0.1] to [IPv6:::1]
+dnl FEATURE(`msp', `[127.0.0.1]')dnl
+FEATURE(`msp', `[<span class="message_content">10.1.10.56</span>]')dnl</pre><p>Add apache to the email trusted-users list  </p><pre style="margin-left: 40.0px;"># vi /etc/mail/trusted-users</pre><p>add</p><p style="margin-left: 40.0px;">apache</p><p>backup /etc/mail/<a href="http://sendmail.cf" class="external-link" rel="nofollow">sendmail.cf</a> and install the new config</p><pre># mv /etc/mail/sendmail.cf /etc/mail/sendmail.cf.BCK
+# m4 /etc/mail/submit.mc &gt; /etc/mail/submit.cf</pre><p>You may see the error &quot;*** ERROR: FEATURE() should be before MAILER()&quot;. Ignore it.</p><pre># ln -s /etc/mail/submit.cf /etc/mail/sendmail.cf
+</pre><p>Whitelist the server on the core Bombplates host</p><pre style="margin-left: 40.0px;">$ ssh USER@shell.mcnutility.com
+$ sudo vim /etc/exim4/update-exim4.conf.conf</pre><p>Add the new server's IP address to the list in dc_relay_nets</p><pre style="margin-left: 40.0px;">$ sudo service exim4 restart</pre><p>Disable the sendmail daemon (back on the new server)</p><pre style="margin-left: 40.0px;"># vi /etc/sysconfig/sendmail
+
+DAEMON=no 
+QUEUE= 
+SMQUEUE=p1h</pre><pre style="margin-left: 40.0px;"># /sbin/chkconfig sendmail off
+# /sbin/chkconfig postfix off</pre><p>If this server is hosted outside of Peak10's ecosystem, email Peak10 asking for a firewall exception</p><p style="margin-left: 40.0px;">to: <a href="mailto:support@peak10.com" class="external-link" rel="nofollow">support@peak10.com</a><br/>subject: open port on fw and forward to IP<br/>Body: Please open port 25 from IP X.X.X.X to IP 68.71.99.148(10.1.10.56)</p><p>Make sure logwatch is sending its messages to a coherent address</p><pre style="margin-left: 40.0px;"># yum install logwatch
+# vi /usr/share/logwatch/default.conf/logwatch.conf</pre><pre style="margin-left: 40.0px;">MailTo = security@bombplates.com</pre>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

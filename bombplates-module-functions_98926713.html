@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : bombplates module functions</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : bombplates module functions
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>The bombplates module includes several general-use functions that other modules may wish to reference</p><p>bombplates_include_custom_css<br/>  Params:<br/>    None<br/>  Returns:<br/>    Boolean<br/>  Description:<br/>    Determine if a module should add its custom CSS to the currently-rendering page. Returns FALSE if notheme is enabled or the current page is an admin-type page</p><p>bombplates_get_us_states<br/>  Params:<br/>    None<br/>  Returns:<br/>    array( 'AL' =&gt; 'Alabama' ...)<br/>  Description:<br/>    return an array of all US states and their abbreviations</p><p>bombplates_get_countries<br/>  Param:<br/>    $include_code =&gt; bool - should the keys be ISO country codes or ints<br/>  Return:<br/>    array('US' =&gt; &quot;United States&quot;...) OR array(0 =&gt; &quot;United States&quot;)<br/>  Description<br/>    Retreive an array of countries.</p><p>bombplates_set_message<br/>  Param:<br/>    $message =&gt; string - &quot;I can't do that Dave&quot;<br/>    $code =&gt; string - see <a href="https://intranet.devmcn.com/documentation/error-codes" class="external-link" rel="nofollow">Error Codes</a> for valid options<br/>    $level =&gt; string - error|warning|message<br/>    $email =&gt; bool - Should an email be sent to the dev team to investigate<br/>  Return:<br/>    none<br/>  Description:<br/>    Display an error to the user, log it to watchdog, and potentially email the dev team. This function should be triggered in situations where the developer knows something is very wrong. The user is prompted to contact support with an error code which maps to a specific error condition in a specific file within a specific module on a specific server.</p><p>bombplates_filter_xss<br/>  Param<br/>    $string =&gt; string - &quot;string to filter&quot;<br/>    $convert_urls =&gt; bool - should urls be converted to &lt;a href&gt; tags<br/>  Return:<br/>    string =&gt; &quot;sanitized and tag balanced HTML string&quot;<br/>  Description:<br/>    This is a very permissive wrapper function for drupal's built-in filter_url. It basically allows all HTML tags. Only designated content generators (e.g. the band) should ever generate text that goes through this filter</p><p>bombplates_base_url<br/>  Param:<br/>    none<br/>  Return:<br/>    string - &quot;<a rel="nofollow">http://SOMEBAND.bombplates.com&quot;</a><br/>  Description<br/>    Each band site can be legitimately reached through both their own <a href="http://SOMEBAND.com" class="external-link" rel="nofollow">SOMEBAND.com</a> url and our assigned <a href="http://SOMEBAND.bombplates.com" class="external-link" rel="nofollow">SOMEBAND.bombplates.com</a> url. The global $base_url will always contain one of those. This function finds and returns the other.</p><p>bombplates_user_access<br/>  Param:<br/>    $perms =&gt; array - array of permission name strings<br/>    $account =&gt; mixed - per user_access function<br/>    $reset =&gt; bool - per user_access function<br/>  Return:<br/>    boolean - does the current|specified user have at leas one of the supplied permissions<br/>  Description:<br/>    Invoke user_access multiple times with a single function call to determine if a user has at least one of several supplied permissions</p><p>bombplates_api_access<br/>  Param:<br/>    $api_key =&gt; string - alphanumeric API key passed via $_GET or $_POST<br/>  Return:<br/>    boolean - does the passed $api_key match the api key on file?<br/>  Description:<br/>    This function should be used as the access_callback for Bombplates API functions</p><p>bombplates_api_form<br/>  Param:<br/>    $callback_path =&gt; string - internal path of the callback URL the 3rd-party API will access<br/>    $using_post =&gt; boolean - should the callback url exclude the API key as a GET parameter?<br/>  Return:<br/>    array - per the drupal API API. Including read-only callback URL and api key fields and a checkbox to reset the API key<br/>  Description:<br/>    Generate the default form fields for another form to include API info.<br/><br/>bombplates_url_outbound_alter<br/>  Param:<br/>    &amp;$path =&gt; string - per url()<br/>    &amp;$options =&gt; array - per url()<br/>    $original_path =&gt; string - per $path argument to url() but without modifications<br/>  Return:<br/>    None<br/>  Description:<br/>    Allow modules to hook into invocations of url() and modify links. This will be invoked many times, so KEEP IT LIGHT!</p><p>bombplates_url_outbound_alter<br/>  Param:<br/>    &amp;$result =&gt; string - an internal path<br/>    $path =&gt; string - the original path that was invoked<br/>    $path_language =&gt; string - a language code<br/>  Return:<br/>    None<br/>  Description:<br/>    Allow modules to modify incoming links before the page loads.</p></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

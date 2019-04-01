@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : audio API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : audio API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>audio module hooks<br/>- These hooks allow modules to add songs and albums to the audio player, etc. and add new fields to such content</p><p>hook_audio_load<br/>Parameters:<br/>$id =&gt; 'string' - usually a node nid but can also be some other unique string<br/>Returns:<br/>StdObject - Arbitrary fields are allowed, but the following are required at minimum:<br/>id =&gt; 'string' - matching the $id parameter<br/>audio_elements =&gt; array() - data pulled from the audio_elements table<br/>title =&gt; 'string' - the name of the song<br/>type =&gt; 'song'|'album'<br/>Description:<br/>Given a unique audio ID, fill in the details of the object. Most modules only need to implement this if they provide their own audio IDs via hook_audio_get_songs or hook_audio_get_albums.</p><p>hook_audio_get_songs<br/>Parameters:<br/>none<br/>Returns:<br/>array( 'id1', 'id2'... )<br/>Description:<br/>Return a list of unique audio IDs for songs this module provides to the audio API. e.g. the core audio module provides the node nids of all audio_song objects</p><p>hook_audio_get_albums<br/>Parameters:<br/>none<br/>Returns:<br/>array( 'id1', 'id2'... )<br/>Description:<br/>Return a list of unique audio IDs for albums this module provides to the audio API. e.g. the core audio module provides the node nids of all audio_album objects</p><p>hook_audio_song_types<br/>Parameters:<br/>none<br/>Returns:<br/>array('module_name' =&gt; 'Module Description')<br/>Description:<br/>Implementing this hook adds a tab to the manage/audio-song page allowing the songs to be sorted by activation and weight within this module.</p><p>hook_audio_album_types<br/>Parameters:<br/>none<br/>Returns:<br/>array('module_name' =&gt; 'Module Description')<br/>Description:<br/>Implementing this hook adds a tab to the manage/audio-album page allowing the albums to be sorted by activation and weight within this module.</p><p>hook_audio_fields<br/>Parameters<br/>$obj =&gt; StdObject - as returned by hook_audio_load<br/>Returns:<br/>array(<br/>module_name =&gt; array(<br/>'name' =&gt; 'module_name',<br/>'title' =&gt; 'Module Description',<br/>'fields' =&gt; array( 'field1' =&gt; array(0 =&gt; $field...)...), - Where $field is an array per the forms API<br/>'weight' =&gt; int,<br/>'always_on' =&gt; TRUE|FALSE,<br/>)<br/>)<br/>Description:<br/>Generate form fields for editing the audio object passed in. A checkbox with the title 'name' will be put in &quot;Enabled Locations&quot; fieldset of this object's edit form (i.e. audio_song or audio_album node or audio_edit_external_form form). The 'fields' parameter will be rendered in a fieldset that will collapse/expand as the checkbox is toggled off/on. If always_on is TRUE, the checkbox will not be displayed, and the fieldset will not be collapsible. These fieldets are sorted by 'weight'. If multiple fieldsets contain a field with the same name, those values will be linked via javascript and the default submit function.</p><p>hook_audio_elements_validate<br/>Parameters:<br/>$form =&gt; array() - per drupal forms API<br/>&amp;$form_state =&gt; array() - per drupal forms API<br/>Returns:<br/>none<br/>Description:<br/>Validate an audio object editing form. This function is invoked when an audio_song or audio_album node or audio_edit_external_form form is submitted. Generally, any given module should validate any fields it added to the form using hook_audio_fields.</p><p>hook_audio_elements_submit<br/>Parameters:<br/>$form =&gt; array() - per drupal forms API<br/>&amp;$form_state =&gt; array() - per drupal forms API<br/>Returns:<br/>none<br/>Description:<br/>Submit an audio object editing form. This function is invoked when an audio_song or audio_album node or audio_edit_external_form form is submitted. Generally, any given module should submit any fields it added to the form using hook_audio_fields. Fields that were added with the form $fields['name'][delta] will be automatically added to the audio_elements table. More complex fields will need to be processed manually.</p><p>hook_audio_xml<br/>Parameters:<br/>$songs =&gt; array(StdObject...) - each object is a song object per hook_audio_load<br/>Returns:<br/>'string' - XML for display<br/>Description<br/>Given a list of loaded song objects, generate whatever XML the audio player created by this module requires to render an audio player with those songs.</p><p>hook_audio_xml_small<br/>Parameters:<br/>$songs =&gt; array(StdObject) - each object is a song object per hook_audio_load<br/>Returns:<br/>'string' - XML for display<br/>Description<br/>Given a list of loaded song objects (usually just 1), generate whatever XML the audio player created by this module requires to render a small audio player with that song.</p><p>----- Non API helper functions ----</p><p>audio_insert_data<br/>Parameters:<br/>$id =&gt; string - unique object id<br/>$name =&gt; string - field name<br/>$delta =&gt; int - Instance number of this field for this object<br/>$value =&gt; mixed - value<br/>Returns:<br/>None<br/>Description:<br/>Adds an entry to the audio_elements table. This is how modules can add custom fields to all types of audio objects throughout the system</p><p>audio_delete_data<br/>Parameters:<br/>$id =&gt; string - unique object id<br/>$name =&gt; string - field name<br/>$delta =&gt; int - instance number of this field for this object<br/>$through_end =&gt; boolean - should all instances after $delta also be deleted?<br/>Returns<br/>none<br/>Description:<br/>Removes an entry from the audio_elements table. This allows modules to delete specific data from audio objects throughout the system</p><p>audio_load_audio<br/>Parameters:<br/>$id =&gt; string - unique object id<br/>$no_cache =&gt; boolean - should the cache be bypassed?<br/>Returns:<br/>object - a fully-loaded audio object per hook_audio_load<br/>Description:<br/>This function loads a single audio object (from cache if possible) based on its unique ID. Module's should use this function instead of direct invocations of hook_audio_load both due to its simplicity, and because it caches, improving performance.</p><p>audio_get_songs<br/>Parameters:<br/>$ids =&gt; array - list of unique audio ID strings<br/>$type =&gt; 'module_name' - per hook_audio_song_types (e.g. &quot;catalog&quot; or &quot;audio_display&quot;)<br/>Returns:<br/>array - objects per hook_audio_load<br/>Description:<br/>This function loads audio song objects. $ids and $type are mutually exclusive. If $ids is specified, those specific objects are loaded. If $type is specified instead, all songs that are active for that section of the site are loaded. If neither is specified, all songs are loaded.</p><p>audio_get_albums<br/>Parameters:<br/>$ids =&gt; array - list of unique audio ID strings<br/>$type =&gt; 'module_name' - per hook_audio_album_types (e.g. &quot;catalog&quot; or &quot;audio_display&quot;)<br/>Returns:<br/>array - objects per hook_audio_load<br/>Description:<br/>This function loads audio album objects. $ids and $type are mutually exclusive. If $ids is specified, those specific objects are loaded. If $type is specified instead, all albums that are active for that section of the site are loaded. If neither is specified, all albums are loaded.</p><p>audio_get_complements<br/>Parameters:<br/>$id =&gt; string - unique audio object ID<br/>$type =&gt; 'songs'|'albums' - retreive what type of complements?<br/>Returns:<br/>array - of audio object IDs<br/>Description<br/>This function fetches the IDs of a particular audio object's complementary type. e.g. If an album ID (and the type 'songs') are passed in, it will retrieve a list of all songs on that album. If a song ID (and the type 'albums') are passed, then it will return all albums that song is on.</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

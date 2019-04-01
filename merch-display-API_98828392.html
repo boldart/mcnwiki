@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : merch display API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : merch display API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>merch_display module - hooks created by the merch_display module<br/> - These hooks allow modules to override and extend the default merch-item properties.</p><p>hook_merch_display_service_list<br/>  Parameters:<br/>    $automatic_only =&gt; bool, // if TRUE, only return stores that can create legal buttons/link with their default parameters. <br/>     (e.g. merch_display_link creates a valid link with minimal input; merch_display_html does not.)<br/>  Returns:<br/>    array(<br/>      'module_name' =&gt; t('Human Readable Name')<br/>      )<br/>    )<br/>  Description:<br/>    Return the machine and human readable names of a module that implements<br/>      merch_display hooks<br/><br/>hook_merch_display_node_fields<br/>  Parameters:<br/>    None<br/>  Returns:<br/>    array(<br/>      'module_name' =&gt; array() //per forms API<br/>    )<br/>  Description:<br/>    Return form elements for editing a merch-item node. Form element keys may be shared between multiple modules. This allows field contents to move between stores. e.g. shipping1 will be used by most 3rd-party stores, so if both PayPal and MerchMo implement that field the value of the field will transfer between the stores.<br/><br/>hook_merch_display_node_fields_validate<br/>  Parameters:<br/>    $form - array (per forms API)<br/>    &amp;$form_state - array (per forms API)<br/>  Returns:<br/>    none<br/>  Description:<br/>    Custom validation for fields created by hook_merch_display_node_fields<br/><br/>hook_merch_display_node_fields_submit<br/>  Parameters:<br/>    $form - array (per forms API)<br/>    &amp;$form_state - array (per forms API)<br/>  Returns:<br/>    none<br/>  Description:<br/>    Custom submission for fields create by hook_merch_display_node_fields<br/><br/>hook_merch_display_display<br/>  Parameters:<br/>    $node - fully-loaded node object<br/>  Returns:<br/>    string - sanitized HTML code<br/>  Description:<br/>    Generate the HTML code to display a single merch item</p><p>hook_merch_display_display_header<br/>  Parameters<br/>    none<br/>  Returns:<br/>    string - HTML code<br/>  Description:<br/>    Generate HTML to append to the start of merch widgets (i.e. to include necessary CSS or JS)</p><p><br/>hook_merch_display_display_footer<br/>  Parameters<br/>    none<br/>  Returns:<br/>    string - HTML code<br/>  Description:<br/>    Generate HTML to append to the end of merch widgets (i.e. to include necessary CSS or JS)<br/><br/>hook_merch_display_settings_form<br/>  Parameters:<br/>    None<br/>  Returns:<br/>    $form =&gt; array(), // per forms API<br/>  Description:<br/>    Generate fields for manage/merch/settings form. The form is ultimately run through system_settings_form.</p><div> </div><p>hook_merch_display_disable_node<br/>  Parameters:<br/>    $node - fully-loaded node object<br/>  Returns:<br/>    boolean - should this node be blocked from display?<br/>  Description:<br/>    Allows modules to flag specific nodes to not be displayed. (e.g. fan_club will block fan_club_only products from display to anonymous users)</p><p>hook_merch_display_callback<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    string - HTML for display - implementations may also exit() to short-circuit the theme system (e.g. if they return JSON)<br/>  Description:<br/>    This hook should check whatever GET/POST variables have been passed in and determine if a user's purchase has been made sucessfully</p><p>hook_merch_display_payment_configured<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    boolean - is this payment type configured?<br/>  Description:<br/>    Verify if a store is configured or not. This is used to determine if any store is configured yet.</p><p>hook_merch_display_get_order_validate<br/>  Parameters:<br/>    $node object =&gt; a fully-loaded merch_item node<br/>  Returns:<br/>    array - data to be serialized and added to the custom field for IPN purposes<br/>  Description:<br/>    This hook is invoked when a merch item is displayed. It generates an array of data that may be relevant when a purchase of that item is confirmed. This data will generally be passed in the clear, so it should not be sensitive.</p><p>hook_merch_display_order_validate<br/>  Parameters<br/>    $params array =&gt; per hook_merch_display_get_order_validate<br/>  Returns:<br/>    none<br/>  Description:<br/>    $params contains the results of all of the invocations of hook_merch_display_get_order_validate from when it was invoked before purchasing a product. This hook is invoked after the order is confirmed. Modules can use whatever data they set before to grant services, send out emails, etc. At minimum, it should contain a session id (s) and an email address (mail).</p></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

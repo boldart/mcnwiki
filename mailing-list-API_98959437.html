@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : mailing list API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Developer-Documentation_98926625.html">Bombplates Developer Documentation</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="APIs_98959403.html">APIs</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Internal-API_98992172.html">Internal API</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : mailing list API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 23, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>mailing_list module - hooks created by the mailing_list module<br/> - These hooks allow modules to override and extend the default mailing list.</p><p>hook_mailing_list_service_list<br/>  Parameters:<br/>    None<br/>  Returns:<br/>    array(<br/>      'module_name' =&gt; 'Human Readable Name'<br/>      )<br/>    )<br/>  Description:<br/>    Return the machine and human readable names of a module that implements<br/>      mailing_list hooks<br/><br/>hook_mailing_list_manage_fields<br/>  Parameters:<br/>    None<br/>  Returns:<br/>    array() per forms API<br/>  Description:<br/>    Return form elements for administering this node from manage/mailing_list<br/><br/>hook_mailing_list_manage_validate<br/>  Parameters:<br/>    $form - array (per forms API)<br/>    &amp;$form_state - array (per forms API)<br/>  Returns:<br/>    none<br/>  Description:<br/>    Validate the form from manage/mailing_list<br/><br/>hook_mailing_list_manage_submit<br/>  Parameters:<br/>    $form - array (per forms API)<br/>    &amp;$form_state - array (per forms API)<br/>  Returns:<br/>    none<br/>  Description:<br/>    Submit the form from manage/mailing_list<br/><br/>hook_mailing_list_join<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    none (default and most common case)<br/>    array() per forms API<br/>  Description:<br/>    Return form elements to build mailing list signup on mailing_list<br/><br/>hook_mailing_list_join_validate<br/>  Parameters:<br/>    $form - array (per forms API)<br/>    &amp;$form_state - array (per forms API)<br/>  Returns:<br/>    none<br/>  Description:<br/>    Validate the form from mailing_list<br/><br/>hook_mailing_list_join_submit<br/>  Parameters:<br/>    $form - array (per forms API)<br/>    &amp;$form_state - array (per forms API)<br/>  Returns:<br/>    none<br/>  Description:<br/>    Submit the form from mailing_list<br/><br/>hook_mailing_list_get_link<br/>  Parameters:<br/>    none<br/>  Returns:<br/>    array(<br/>      '#text' =&gt; 'Human readable text',<br/>      '#destination' =&gt; 'link/path'<br/>      '#query' =&gt; array(elements passed directly to l() ),<br/>    )<br/>    OR TRUE|FALSE<br/>  Description:<br/>    Link settings to generate mailing_list link for public display. Returning TRUE tells the system to use the default link. Returning FALSE displays nothing.</p><p>hook_mailing_list_subscribe<br/>  Parameters:<br/>    $fields - array - containing - at minimum - a field with the key &quot;email&quot;<br/>    $list - string - ID of the mailing list<br/>  Returns:<br/>    TRUE|FALSE - was the process completed sucessfully?<br/>  Description:<br/>    Prompt the currently-selected mailing_list_service to create a subscription using the provided details</p><p>hook_mailing_list_unsubscribe<br/>  Parameters:<br/>    $fields - array - containing - at minimum - a field with the key &quot;email&quot;<br/>    $list - string - ID of the mailing list<br/>  Returns:<br/>    TRUE|FALSE - was the process completed sucessfully?<br/>  Description:<br/>    Prompt the currently-selected mailing_list_service to cancel a subscription using the provided details</p></div></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

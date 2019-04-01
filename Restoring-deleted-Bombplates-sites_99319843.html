@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MCNi Wiki : Restoring deleted Bombplates sites</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MCNi-Wiki_98631811.html">MCNi Wiki</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates_98893825.html">Bombplates</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Bombplates-Sysadmin-Documentation_99418115.html">Bombplates Sysadmin Documentation</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            MCNi Wiki : Restoring deleted Bombplates sites
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Smith</span> on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Sometimes a band's site will be deleted erroneously. They might have paid us but their account was misconfigured such that <a href="http://bombplates.com" class="external-link" rel="nofollow">bombplates.com</a> doesn't know it, or an account manager might delete them by accident. Here's the process to restore the site if everything is straightforward</p><p>Key:</p><ul><li>bandsY - the hosting server where the site existed before deletion</li><li>bandsZ - the hosting server where the site exists after recreation</li><li>SITE - the url of the site (e.g. <a href="http://someband.bombplates.com" class="external-link" rel="nofollow">someband.bombplates.com</a>)</li><li>SIT - the database abbreviation of the site. Usually the first 8 letters of the url (e.g. someothe for <a href="http://someotherband.bombplates.com" class="external-link" rel="nofollow">someotherband.bombplates.com</a>)</li><li>USER - whatever username is applicable in the context (e.g. your own unix username or a band site's mysql username)</li></ul><p>log into <a href="http://bombplates.com" class="external-link" rel="nofollow">bombplates.com</a> (as an Account Manager or higher)</p><p>Go to <a href="https://www.bombplates.com/admin/account_forms" class="external-link" rel="nofollow">Account Management</a>.</p><p>Re-create the user - If you do not know a the user's actual details you can find them in various logs.</p><ul><li>Starting Design - does not matter.</li><li>Band Member Username - is found in the database backup: <a href="mailto:root@10.1.1.51" class="external-link" rel="nofollow">root@10.1.1.51</a>:/volume1/bombplates/bandsY/db/SIT_db/users.MYD</li><li>Band Member Email - is found in the same location</li><li>Band/Artist Name - database backup: <a href="mailto:root@10.1.1.51" class="external-link" rel="nofollow">root@10.1.1.51</a>:/volume1/bombplates/bandsY/db/SIT_db/variables.MYD (as site_name)</li><li>Website URL - can be found in the account creation log: <a href="mailto:USER@bandsY.bombplates.com" class="external-link" rel="nofollow">USER@bandsY.bombplates.com</a>:/usr/bandsXTools/launch_command.log</li><li>Subdomain - can be found in the same place</li></ul><p>Find the new user's integration KEY and host server number (Z) by editing the user's Integration page (user/UID/edit/Integration)</p><p>While you're there, update the user's billing info appropriately (user/UID/edit/Billing). All dates are stored as <a href="http://www.epochconverter.com/" class="external-link" rel="nofollow">timestamps</a>.</p><ul><li>&quot;Outstanding payments&quot; is probably 1 or 2 if the site's been deleted</li><li>&quot;Trial ends&quot; - if the user's trial is over, the timestamp must end with 9. (9 itself is fine). If their trial hasn't expired, it must end with 0.</li><li>&quot;Next Payment&quot; is when their nex payment is considered past due. If they haven't entered payment info by then, the site will be deleted again.</li></ul><p>Restore the user's data from FS3</p><p>$ ssh <a href="mailto:root@10.1.1.51" class="external-link" rel="nofollow">root@10.1.1.51</a><br/># cd /volume1/bombplates/bandsY<br/># /usr/syno/bin/rsync -avz --exclude=settings.php --exclude=manual_db.php sites/SITE/* <a href="mailto:util@utility01.bombplates.com" class="external-link" rel="nofollow">util@utility01.bombplates.com</a>:/var/www/html/sites/SITE/<br/># /usr/syno/bin/rsync -avz db/SIT_db/* <a href="mailto:util@bpdb01.bombplates.com" class="external-link" rel="nofollow">util@bpdb01.bombplates.com</a>:/home/util/tmp/SIT_db/<br/># exit<br/>$ ssh <a href="mailto:MYACCOUNT@68.71.99.201" class="external-link" rel="nofollow">MYACCOUNT@68.71.99.201</a><br/>$ sudo su<br/># mv tmp/SIT_db/* /media/data/mysql/SIT_db/<br/># chown -R mysql:mysql /media/data/mysql/SIT_db<br/># chmod -R 770 /media/data/mysql/SIT_db<br/># service mysql restart</p><p>Restart MySQL if the site is not now displaying correctly.</p><div>$ ssh <a href="mailto:USER@bandsZ.bombplates.com" class="external-link" rel="nofollow">USER@bandsZ.bombplates.com</a></div><div>$ sudo /etc/init.d/mysqld restart</div><div> </div><div>Log into SITE as administrator</div><div> </div><div>Edit the band user (usually user/12/edit. If not, admin/user/user and click &quot;edit&quot; for the right user)</div><ul><li>Verify that the username and email match what you entered when recreating the user. If not, update the user on <a href="http://bombplates.com" class="external-link" rel="nofollow">bombplates.com</a></li></ul><div><div>Update the integration KEY</div><p><a href="https://SITE/pw/resync" class="external-link" rel="nofollow">https://SITE/pw/resync</a></p></div><div>Flush the cache</div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Apr 01, 2019 16:05</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>
